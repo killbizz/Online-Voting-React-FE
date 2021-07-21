@@ -4,13 +4,16 @@ import React, { ReactNode } from 'react'
 import Head from 'next/head'
 import NavigationBar from './navbar/NavigationBar'
 import Footer from './footer/Footer'
+import { AuthService } from "../services/auth.service";
 
 type Props = {
   children?: ReactNode
   title?: string
 }
 
-const Layout = ({ children, title = 'e-Voting Web Application' }: Props) => (
+const Layout = ({ children, title = 'e-Voting Web Application' }: Props) => {
+  const authService: AuthService = AuthService.getInstance();
+  return (
   <div className="wrap">
     <Head>
       <title>{title}</title>
@@ -20,11 +23,12 @@ const Layout = ({ children, title = 'e-Voting Web Application' }: Props) => (
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
     </Head>
     <header>
-      <NavigationBar />
+      <NavigationBar authService={authService} />
     </header>
     {children}
     <Footer />
   </div>
-)
+  );
+};
 
 export default Layout
