@@ -1,40 +1,29 @@
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import React, { ReactNode } from 'react'
-import Link from 'next/link'
 import Head from 'next/head'
+import NavigationBar from './navbar/NavigationBar'
+import Footer from './footer/Footer'
 
 type Props = {
   children?: ReactNode
   title?: string
 }
 
-const Layout = ({ children, title = 'This is the default title' }: Props) => (
-  <div>
+const Layout = ({ children, title = 'e-Voting Web Application' }: Props) => (
+  <div className="wrap">
     <Head>
       <title>{title}</title>
       <meta charSet="utf-8" />
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      <link rel="shortcut icon" type="image/x-icon" href='/public/favicon.ico' />
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
     </Head>
     <header>
-      <nav>
-        <Link href="/">
-          <a>Home</a>
-        </Link>{' '}
-        |{' '}
-        <Link href="/about">
-          <a>About</a>
-        </Link>{' '}
-        |{' '}
-        <Link href="/users">
-          <a>Users List</a>
-        </Link>{' '}
-        | <a href="/api/users">Users API</a>
-      </nav>
+      <NavigationBar />
     </header>
     {children}
-    <footer>
-      <hr />
-      <span>I'm here to stay (Footer)</span>
-    </footer>
+    <Footer />
   </div>
 )
 
