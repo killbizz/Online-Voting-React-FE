@@ -37,7 +37,7 @@ const NavigationBar = () => {
                                 <a className="nav-link" >Homepage</a>
                             </Link>
                         </li>
-                        {authService.isUserLoggedIn() &&
+                        {authService.isUserLoggedIn() && !authService.isUserAdmin() &&
                         <li className="nav-item">
                             <Link href="user-dashboard">
                                 <a className="nav-link">Elections</a>
