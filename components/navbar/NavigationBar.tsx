@@ -15,9 +15,9 @@ const NavigationBar = ({ authService }: Props) => {
                 <div className="container-fluid">
                     <div className="navbar-nav">
                         <div className="nav-item text-nowrap">
-                            <Link href="">
+                            <Link href="/">
                                 <a className="nav-link active" aria-current="page">
-                                    <Image id="VotingOnlineWebApplication" src="/images/voting-box.png" alt="Online Voting Web Application Logo" width="80" height="60" />
+                                    <Image id="VotingOnlineWebApplication" src="/images/voting-box.png" alt="Online Voting Web Application Logo" width="60" height="60" />
                                 </a>
                             </Link>
                         </div>
