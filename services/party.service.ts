@@ -1,14 +1,7 @@
 import { Party } from './../classes/Party';
-import { EventEmitter, Injectable, Output } from '@angular/core';
-import getBackendResponse from '../lib/endpoints';
+import getBackendResponse from '../pages/api/lib/endpoints';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class PartyService {
-
-  @Output() newPartyCreated = new EventEmitter();
-  @Output() partyDeleted = new EventEmitter();
 
   constructor() { }
 
@@ -45,7 +38,6 @@ export class PartyService {
     if(response.error !== undefined){
       return false;
     }
-    this.newPartyCreated.emit();
     return true;
   }
 
@@ -54,7 +46,6 @@ export class PartyService {
     if(response.error !== undefined){
       return false;
     }
-    this.partyDeleted.emit();
     return true;
   }
 

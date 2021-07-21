@@ -1,14 +1,9 @@
-import { EventEmitter, Injectable, Output } from '@angular/core';
 import { Vote } from '../classes/Vote';
-import getBackendResponse from '../lib/endpoints';
+import getBackendResponse from '../pages/api/lib/endpoints';
 import { AuthService } from './auth.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class VoteService {
 
-  @Output() newVoteCreated = new EventEmitter();
+export class VoteService {
 
   constructor(private authService: AuthService) { }
 
@@ -54,7 +49,6 @@ export class VoteService {
     if(response.error !== undefined){
       return false;
     }
-    this.newVoteCreated.emit();
     return true;
   }
 

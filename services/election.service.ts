@@ -1,15 +1,7 @@
-import { EventEmitter, Injectable, Output } from '@angular/core';
 import { Election } from '../classes/Election';
-import getBackendResponse from '../lib/endpoints';
+import getBackendResponse from '../pages/api/lib/endpoints';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class ElectionService {
-
-  @Output() newElectionCreated = new EventEmitter();
-  @Output() electionDeleted = new EventEmitter();
-  @Output() electionUpdated = new EventEmitter();;
 
   constructor() { }
 
@@ -46,7 +38,6 @@ export class ElectionService {
     if(response.error !== undefined){
       return false;
     }
-    this.newElectionCreated.emit();
     return true;
   }
 
@@ -56,7 +47,6 @@ export class ElectionService {
     if(response.error !== undefined){
       return false;
     }
-    this.electionUpdated.emit();
     return true;
   }
 
@@ -66,7 +56,6 @@ export class ElectionService {
     if(response.error !== undefined){
       return false;
     }
-    this.electionDeleted.emit();
     return true;
   }
 

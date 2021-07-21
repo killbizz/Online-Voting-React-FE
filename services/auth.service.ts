@@ -1,25 +1,30 @@
-import { Injectable, Output, EventEmitter } from '@angular/core';
 import { User } from '../classes/User';
-import getBackendResponse from '../lib/endpoints';
+import getBackendResponse from '../pages/api/lib/endpoints';
 
-@Injectable({
-  providedIn: 'root'
-})
+// SINGLETON PATTERN
+
 export class AuthService {
 
-  private userLogged: boolean = !!localStorage.getItem("jwtToken");
-  private userRole: String | null = !!localStorage.getItem("jwtToken") ? localStorage.getItem("userRole") : null;
-  @Output() userSignedIn = new EventEmitter();
-  @Output() userLoggedOut = new EventEmitter();
-  @Output() userSignedUp = new EventEmitter();
+  static instance: AuthService;
 
-  constructor() { }
+  private RUNNING_ON_SERVER = typeof window === "undefined";
 
-  isUserLoggedIn() : boolean {
+  private userLogged: boolean | null = !this.RUNNING_ON_SERVER ? !!localStorage.getItem("jwtToken") : null;
+  private userRole: String | null = !this.RUNNING_ON_SERVER && !!localStorage.getItem("jwtToken") ? localStorage.getItem("userRole") : null;
+
+  static getInstance() {
+    if (AuthService.instance === undefined) {
+        AuthService.instance = new AuthService();
+    }
+
+    return this.instance;
+}
+
+  isUserLoggedIn() : boolean | null {
     return this.userLogged;
   }
 
-  isUserAdmin() : boolean {
+  isUserAdmin() : boolean | null {
     return this.isUserLoggedIn() && this.userRole === "admin";
   }
 
@@ -41,7 +46,6 @@ export class AuthService {
     localStorage.setItem("userRole", response.role);
     // TODO : creo un endpoint nel backend che mi restituisca lo userId dato un JWT
     localStorage.setItem("userId", response.userId);
-    this.userSignedIn.emit();
     return true;
   }
 
@@ -52,7 +56,6 @@ export class AuthService {
     if (response.code !== undefined) {
       return false;
     }
-    this.userSignedUp.emit();
     return true;
   }
 
@@ -62,7 +65,6 @@ export class AuthService {
     localStorage.removeItem("userId");
     this.userLogged = false;
     this.userRole = null;
-    this.userLoggedOut.emit();
   }
 
   getUserId() {
