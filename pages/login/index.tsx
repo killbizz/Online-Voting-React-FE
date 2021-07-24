@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Layout from '../../components/Layout'
 import Image from 'next/image'
-import { AuthService } from '../../services/auth.service';
+import { signIn } from '../../services/auth';
 import { useState } from 'react';
 import Router from 'next/router'
 
@@ -13,7 +13,7 @@ const login = () => {
         setErrors(new Map<string,string>(errors.set(key,value)));
     }
 
-    const signIn = async (event: any) => {
+    const signInHandling = async (event: any) => {
         event.preventDefault();
 
         const email: string = event.target.email.value;
@@ -22,8 +22,7 @@ const login = () => {
         const valid: boolean = formValidation(email, password);
 
         if(valid){
-            const authService: AuthService = AuthService.getInstance();
-            const result: boolean = await authService.signIn(email, password);
+            const result: boolean = await signIn(email, password);
             Router.push("/");
         }
     }
@@ -62,7 +61,7 @@ const login = () => {
                 <div className="login">
                         <h1 className="my-4">Login</h1>
                         <Image className="loginSignUpImages" src="/images/login.png" alt="Login Image" width="180" height="180" />  
-                        <form method="POST" name="loginForm" className="my-3" onSubmit={signIn}>
+                        <form method="POST" name="loginForm" className="my-3" onSubmit={signInHandling}>
                         <div className="form-floating">
                             <input type="text" className="form-control" id="email" name="email" placeholder="name@example.com" />
                             <label htmlFor="email">Email address</label>

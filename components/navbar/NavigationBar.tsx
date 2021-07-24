@@ -1,16 +1,15 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { AuthService } from '../../services/auth.service';
+import { logout, isUserAdmin, isUserLoggedIn } from '../../services/auth';
 import { NextRouter, useRouter } from 'next/dist/client/router';
 import Router from 'next/router'
 
 const NavigationBar = () => {
-    const authService: AuthService = AuthService.getInstance();
     const router: NextRouter = useRouter();
 
-    const logout = (event: any) => {
+    const logoutHandling = (event: any) => {
         event.preventDefault();
-        authService.logout();
+        logout();
         Router.push("/");
     }
 
@@ -37,14 +36,14 @@ const NavigationBar = () => {
                                 <a className="nav-link" >Homepage</a>
                             </Link>
                         </li>
-                        {authService.isUserLoggedIn() && !authService.isUserAdmin() &&
+                        {isUserLoggedIn() && !isUserAdmin() &&
                         <li className="nav-item">
                             <Link href="user-dashboard">
                                 <a className="nav-link">Elections</a>
                             </Link>
                         </li>
                         }
-                        {authService.isUserLoggedIn() && authService.isUserAdmin() &&
+                        {isUserLoggedIn() && isUserAdmin() &&
                         <li className="nav-item">
                             <Link href="admin-dashboard">
                                 <a className="nav-link">Admin Dashboard</a>
@@ -53,7 +52,7 @@ const NavigationBar = () => {
                         }
                     </ul>
                     </div>
-                    {!authService.isUserLoggedIn() && !(router.pathname === "/login" || router.pathname === "/sign-up") &&
+                    {!isUserLoggedIn() && !(router.pathname === "/login" || router.pathname === "/sign-up") &&
                     <ul className="navbar-nav">
                         <div className="nav-item text-nowrap px-3">
                             <Link href="/login">
@@ -62,10 +61,10 @@ const NavigationBar = () => {
                         </div>
                     </ul>
                     }
-                    {authService.isUserLoggedIn() && !(router.pathname === "/login" || router.pathname === "/sign-up") &&
+                    {isUserLoggedIn() && !(router.pathname === "/login" || router.pathname === "/sign-up") &&
                     <ul className="navbar-nav">
                         <div className="nav-item text-nowrap px-3">
-                            <a className="nav-link" href="" onClick={logout}>Logout</a>
+                            <a className="nav-link" href="" onClick={logoutHandling}>Logout</a>
                         </div>
                     </ul>
                     }
