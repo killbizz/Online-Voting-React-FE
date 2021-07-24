@@ -1,16 +1,12 @@
 import { User } from '../classes/User';
 import getBackendResponse from '../pages/api/lib/endpoints';
+import cookie from 'js-cookie';
 
 // SINGLETON PATTERN
 
 export class AuthService {
 
   static instance: AuthService;
-
-  private RUNNING_ON_SERVER = typeof window === "undefined";
-
-  private userLogged: boolean | null = !this.RUNNING_ON_SERVER ? !!localStorage.getItem("jwtToken") : null;
-  private userRole: String | null = !this.RUNNING_ON_SERVER && !!localStorage.getItem("jwtToken") ? localStorage.getItem("userRole") : null;
 
   static getInstance() {
     if (AuthService.instance === undefined) {
@@ -20,12 +16,12 @@ export class AuthService {
     return this.instance;
 }
 
-  isUserLoggedIn() : boolean | null {
-    return this.userLogged;
+  isUserLoggedIn() : boolean | undefined {
+    return !!cookie.get("jwtToken");
   }
 
-  isUserAdmin() : boolean | null {
-    return this.isUserLoggedIn() && this.userRole === "admin";
+  isUserAdmin() : boolean | undefined {
+    return this.isUserLoggedIn() && cookie.get("userRole") === "admin";
   }
 
   signIn = async (email: string, password: string): Promise<boolean> => {
@@ -39,13 +35,32 @@ export class AuthService {
     if (response.jwtToken === undefined) {
       return false;
     }
-    this.userLogged = true;
-    this.userRole = response.role;
-    localStorage.setItem("jwtToken", response.jwtToken);
-    // TODO : creo un endpoint nel backend che mi restituisca il ruolo dato un JWT
-    localStorage.setItem("userRole", response.role);
-    // TODO : creo un endpoint nel backend che mi restituisca lo userId dato un JWT
-    localStorage.setItem("userId", response.userId);
+    // API calls to set secure cookies
+    // fetch("/api/auth/login", {
+    //   method: "post",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ jwtToken: response.jwtToken })
+    // });
+    // fetch("/api/auth/login", {
+    //   method: "post",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ userRole: response.role })
+    // });
+    // fetch("/api/auth/login", {
+    //   method: "post",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ userId: response.userId })
+    // });
+    // dummy cookie set
+    cookie.set("jwtToken", response.jwtToken);
+    cookie.set("userRole", response.role);
+    cookie.set("userId", response.userId);
     return true;
   }
 
@@ -60,14 +75,21 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem("jwtToken");
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("userId");
-    this.userLogged = false;
-    this.userRole = null;
+    // API calls to delete cookies
+    fetch("/api/auth/logout", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({})
+    });
+    // dummy cookie delete
+    cookie.remove("jwtToken");
+    cookie.remove("userRole");
+    cookie.remove("userId");
   }
 
-  getUserId() {
-    return localStorage.getItem("userId");
+  getUserId(): string | undefined {
+    return cookie.get("userId");
   }
 }
