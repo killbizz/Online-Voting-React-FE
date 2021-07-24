@@ -34,10 +34,8 @@ body, html {
   justify-content: center;
 }
 
-.newSynthesizerForm input {
-    width: 20em;
-    text-align: center;
-    margin: 0.2em;
+.dp {
+    width: 100%;
 }
 
 .boxing-form {
