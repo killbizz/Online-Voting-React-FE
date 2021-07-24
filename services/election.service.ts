@@ -1,9 +1,19 @@
 import { Election } from '../classes/Election';
 import getBackendResponse from '../pages/api/lib/endpoints';
 
+// SINGLETON PATTERN
+
 export class ElectionService {
 
-  constructor() { }
+  static instance: ElectionService;
+
+  static getInstance() {
+    if (ElectionService.instance === undefined) {
+        ElectionService.instance = new ElectionService();
+    }
+
+    return this.instance;
+  }
 
   getElections = async (): Promise<Election[]> => {
     const { response } = (

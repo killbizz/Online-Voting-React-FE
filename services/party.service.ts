@@ -1,9 +1,19 @@
 import { Party } from './../classes/Party';
 import getBackendResponse from '../pages/api/lib/endpoints';
 
+// SINGLETON PATTERN
+
 export class PartyService {
 
-  constructor() { }
+  static instance: PartyService;
+
+  static getInstance() {
+    if (PartyService.instance === undefined) {
+        PartyService.instance = new PartyService();
+    }
+
+    return this.instance;
+  }
 
   getParties = async (): Promise<Party[]> => {
     const { response } = (

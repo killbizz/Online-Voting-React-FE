@@ -2,10 +2,22 @@ import { Vote } from '../classes/Vote';
 import getBackendResponse from '../pages/api/lib/endpoints';
 import { AuthService } from './auth.service';
 
+// SINGLETON PATTERN
 
 export class VoteService {
 
-  constructor(private authService: AuthService) { }
+  constructor() { }
+
+  static instance: VoteService;
+  private authService: AuthService = AuthService.getInstance();
+
+  static getInstance() {
+    if (VoteService.instance === undefined) {
+        VoteService.instance = new VoteService();
+    }
+
+    return this.instance;
+  }
 
   getVotes = async (): Promise<Vote[]> => {
     const { response } = (
