@@ -1,3 +1,5 @@
+import cookie from 'js-cookie';
+
 export default class Fetcher {
   url: URL;
 
@@ -8,17 +10,17 @@ export default class Fetcher {
   }
 
   async getJSONResponse(method: string, params: string | null = null): Promise<any> {
-    let token: string | null = null;
-    let jwtToken: string | null = null;
-    if (!!localStorage.getItem("jwtToken")){
-      token = localStorage.getItem("jwtToken");
+    let token: string | undefined = undefined;
+    let jwtToken: string | undefined = undefined;
+    if (!!cookie.get("jwtToken")){
+      token = cookie.get("jwtToken");
       jwtToken = "Bearer " + token;
     }
     let header: HeadersInit | undefined = {
       "Content-Type": "application/json"
     };
-    // add JWT if present in the localstorage
-    Object.assign(header, token !== null ? { "Authorization": jwtToken } : null);
+    // add JWT if present in a cookie
+    Object.assign(header, token !== undefined ? { "Authorization": jwtToken } : null);
     let req = null;
     if (method === "GET") {
       req = await fetch(this.url.href, {
