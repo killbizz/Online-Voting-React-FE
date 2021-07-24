@@ -71,7 +71,8 @@ img{
 
 .container{
   height: 100%;
-  display: flex;
+  width: 50% !important;
+  /* display: flex; */
   /* align-items: center; */
   justify-content: center;
 }
