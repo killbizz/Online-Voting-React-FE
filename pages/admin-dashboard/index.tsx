@@ -1,23 +1,27 @@
 import { GetServerSideProps, GetStaticPropsResult, NextApiRequest } from 'next';
 import NewElection from '../../components/admin/NewElection';
 import Layout from '../../components/Layout'
-import { AuthService } from '../../services/auth.service';
-import { PartyService } from '../../services/party.service';
+import { getParties } from '../../services/party.service';
 import { Party } from '../../classes/Party';
+import ElectionList from '../../components/admin/ElectionList';
+import { getElections } from '../../services/election';
+import { Election } from '../../classes/Election';
 
 interface AdminDashboardProps {
-  parties: Party[]
+  parties: Party[],
+  elections: Election[]
 }
 
-const AdminDashboard = ({ parties } : AdminDashboardProps) => {
+const AdminDashboard = ({ parties, elections } : AdminDashboardProps) => {
     return (
         <Layout title="Admin Dashboard">
             <div className="mid">
-                <div className="container col-xxl-8 px-2 py-3">
+                <div className="container col-xxl-8 py-3">
                     <div>
                         <h1 className="text-center mb-4">Admin Dashboard</h1>
                         <h3 className="text-center my-4">Elections</h3>
-                        <NewElection />
+                        <NewElection parties={parties} />
+                        <ElectionList elections={elections} />
                         <h3 className="text-center my-4">Political Parties</h3>
                     </div>
                 </div>
@@ -27,7 +31,6 @@ const AdminDashboard = ({ parties } : AdminDashboardProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps<AdminDashboardProps> = async ({ req }): Promise<GetStaticPropsResult<AdminDashboardProps>> => {
-  const partyService: PartyService = PartyService.getInstance();
   // session handling using cookies
   if(!(req.cookies.jwtToken !== undefined && req.cookies.userRole === "admin")) {
     return {
@@ -39,7 +42,8 @@ export const getServerSideProps: GetServerSideProps<AdminDashboardProps> = async
   }
   return {
     props: {
-      parties: await partyService.getParties()
+      parties: await getParties(),
+      elections: await getElections()
     }
   };
 };
