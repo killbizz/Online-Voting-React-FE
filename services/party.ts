@@ -1,4 +1,4 @@
-import { Party } from './../classes/Party';
+import { Party } from '../classes/Party';
 import getBackendResponse from '../pages/api/lib/endpoints';
 
 export const getParties = async (): Promise<Party[]> => {
