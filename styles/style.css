@@ -74,11 +74,19 @@ img{
 
 .containerDashboard{
   height: 100%;
-  width: 40% !important;
+  width: 80% !important;
   /* display: flex; */
   /* align-items: center; */
   margin: auto;
-  justify-content: center;
+  justify-content: center !important;
+}
+
+.NewFormBoxing {
+  width: 60% !important;
+}
+
+.partyLogo {
+  max-width: 100px !important;
 }
 
 .container{
