@@ -1,7 +1,7 @@
 import { Party } from "../../classes/Party"
 import ReactTooltip from 'react-tooltip';
 import { Election } from "../../classes/Election";
-import { deleteParty } from "../../services/party.service";
+import { deleteParty } from "../../services/party";
 
 interface PartyListProps {
     parties: Party[],
@@ -42,7 +42,7 @@ const PartyList = ({ parties, elections, refreshOnPartiesChange }: PartyListProp
                 { parties.map((party) => 
                     <tr>
                         <th scope="row">{party.id}</th>
-                        <td><img className="rounded" src={party.base64logo} alt={party.name} height="100" width="60" /></td>
+                        <td className="partyLogo"><img className="rounded" src={party.base64logo} alt={party.name} height="100" width="60" /></td>
                         <td>{party.name.charAt(0).toUpperCase() + party.name.slice(1)}</td>
                         <td>{party.candidate.charAt(0).toUpperCase() + party.candidate.slice(1)}</td>
                         <td>

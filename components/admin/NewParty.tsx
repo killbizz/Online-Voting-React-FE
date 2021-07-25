@@ -12,7 +12,7 @@ import {
     Alert
   } from "react-bootstrap";
 import { Party } from "../../classes/Party";
-import { fileToBase64, newParty } from "../../services/party.service";
+import { fileToBase64, newParty } from "../../services/party";
 
 interface NewPartyProps {
     refreshOnPartiesChange: any
@@ -83,95 +83,95 @@ const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
     const [partyCreated, setPartyCreated] = useState(false);
 
     return (
-        <>
-      <Accordion>
-        <Card>
-          <Card.Header style={{ backgroundColor: "white" }}>
-            <div className="d-flex justify-content-center">
-              <Accordion.Toggle as={Button} variant="secondary" eventKey="1">
-                Add new party
-              </Accordion.Toggle>
-            </div>
-          </Card.Header>
-          <Accordion.Collapse eventKey="1">
-            <Card.Body>
-              <Form onSubmit={createNewParty}>
-                <FormGroup as={Row}>
-                  <FormLabel column sm="2" htmlFor="name">
-                    Party Name
-                  </FormLabel>
-                  <Col sm="10">
-                    <FormControl
-                      type="text"
-                      className="sm text-center"
-                      id="name"
-                      name="name"
-                      placeholder="Name"
-                    />
-                    {errors.has("nameError") &&
-                      <small id="nameError" className="text-danger">
-                        {errors.get("nameError")}
-                      </small>
-                    }
-                  </Col>
-                </FormGroup>
-                <FormGroup as={Row}>
-                  <FormLabel column sm="2" htmlFor="type">
-                    Candidate
-                  </FormLabel>
-                  <Col sm="10">
-                    <FormControl
+        <div className="NewFormBoxing mx-auto">
+        <Accordion>
+            <Card>
+            <Card.Header style={{ backgroundColor: "white" }}>
+                <div className="d-flex justify-content-center">
+                <Accordion.Toggle as={Button} variant="secondary" eventKey="1">
+                    Add new party
+                </Accordion.Toggle>
+                </div>
+            </Card.Header>
+            <Accordion.Collapse eventKey="1">
+                <Card.Body>
+                <Form onSubmit={createNewParty}>
+                    <FormGroup as={Row}>
+                    <FormLabel column sm="4" htmlFor="name">
+                        Party Name
+                    </FormLabel>
+                    <Col sm="8">
+                        <FormControl
                         type="text"
                         className="sm text-center"
-                        id="candidate"
-                        name="candidate"
-                        placeholder="Candidate"
+                        id="name"
+                        name="name"
+                        placeholder="Name"
                         />
-                    {errors.has("candidateError") &&
-                      <small id="candidateErrors" className="text-danger">
-                        {errors.get("candidateError")}
-                      </small>
-                    }
-                  </Col>
-                </FormGroup>
-                <FormGroup as={Row}>
-                  <FormLabel column className="mt-4" sm="2" htmlFor="type">
-                    Party Logo
-                  </FormLabel>
-                  <Col sm="10">
-                    <FormControl
-                        type="file"
-                        className="sm text-center mt-4"
-                        id="logo"
-                        name="logo"
-                        />
-                    {errors.has("logoError") &&
-                      <small id="logoErrors" className="text-danger">
-                        {errors.get("logoError")}
-                      </small>
-                    }
-                  </Col>
-                </FormGroup>
-                <Form.Row className="text-center">
-                  <Col sm="12">
-                    <Button className="mt-4" type="submit" variant="primary" onClick={() => setShow(true)}>
-                      Submit
-                    </Button>
-                  </Col>
-                </Form.Row>
-              </Form>
-              {partyCreated &&
-                <Alert variant="success" show={show} onClose={() => setShow(false)} dismissible>
-                  <Alert.Heading className="text-center">
-                    Party created successfully!
-                  </Alert.Heading>
-                </Alert>
-              }
-            </Card.Body>
-          </Accordion.Collapse>
-        </Card>
-      </Accordion>
-    </>
+                        {errors.has("nameError") &&
+                        <small id="nameError" className="text-danger">
+                            {errors.get("nameError")}
+                        </small>
+                        }
+                    </Col>
+                    </FormGroup>
+                    <FormGroup as={Row}>
+                    <FormLabel column sm="4" htmlFor="type">
+                        Candidate
+                    </FormLabel>
+                    <Col sm="8">
+                        <FormControl
+                            type="text"
+                            className="sm text-center"
+                            id="candidate"
+                            name="candidate"
+                            placeholder="Candidate"
+                            />
+                        {errors.has("candidateError") &&
+                        <small id="candidateErrors" className="text-danger">
+                            {errors.get("candidateError")}
+                        </small>
+                        }
+                    </Col>
+                    </FormGroup>
+                    <FormGroup as={Row}>
+                    <FormLabel column className="mt-4" sm="4" htmlFor="type">
+                        Party Logo
+                    </FormLabel>
+                    <Col sm="8">
+                        <FormControl
+                            type="file"
+                            className="sm text-center mt-4"
+                            id="logo"
+                            name="logo"
+                            />
+                        {errors.has("logoError") &&
+                        <small id="logoErrors" className="text-danger">
+                            {errors.get("logoError")}
+                        </small>
+                        }
+                    </Col>
+                    </FormGroup>
+                    <Form.Row className="text-center">
+                    <Col sm="12">
+                        <Button className="mt-4" type="submit" variant="primary" onClick={() => setShow(true)}>
+                        Submit
+                        </Button>
+                    </Col>
+                    </Form.Row>
+                </Form>
+                {partyCreated &&
+                    <Alert variant="success" show={show} onClose={() => setShow(false)} dismissible>
+                    <Alert.Heading className="text-center">
+                        Party created successfully!
+                    </Alert.Heading>
+                    </Alert>
+                }
+                </Card.Body>
+            </Accordion.Collapse>
+            </Card>
+        </Accordion>
+    </div>
     );
 }
 

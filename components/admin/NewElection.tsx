@@ -1,19 +1,7 @@
 import { useState } from "react";
-import {
-    Button,
-    Accordion,
-    Card,
-    Form,
-    Row,
-    Col,
-    InputGroup,
-    FormControl,
-    FormGroup,
-    FormLabel,
-    Alert
-  } from "react-bootstrap";
-  import DatePicker from "react-datepicker";
-  import "react-datepicker/dist/react-datepicker.css";
+import { Button, Accordion, Card, Form, Row, Col, InputGroup, FormControl, FormGroup, FormLabel, Alert } from "react-bootstrap";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { Election } from "../../classes/Election";
 import { Party } from "../../classes/Party";
 import { newElection } from "../../services/election";
@@ -68,7 +56,12 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
   }
 
   const handlePartyClick = (id: number) => {
-
+    const idx: number = partiesInNewElection.indexOf(id);
+    if(idx > -1){
+      partiesInNewElection.splice(idx, 1);
+    } else {
+      partiesInNewElection.push(id);
+    }
   }
 
   const createNewElection = async (event: any) => {
@@ -81,7 +74,7 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
 
     if(valid){
 
-      const election: Election = new Election(0, name, type, moment(dpStartDate).format('YYYY-MM-DD'), moment(dpEndDate).format('YYYY-MM-DD'), [], undefined);
+      const election: Election = new Election(0, name, type, moment(dpStartDate).format('YYYY-MM-DD'), moment(dpEndDate).format('YYYY-MM-DD'), partiesInNewElection , undefined);
 
       const result: boolean = await newElection(election);
       refreshOnElectionsChange();
@@ -89,6 +82,7 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
     }
   }
   
+  let partiesInNewElection: number[] = [];
   const [dpStartDate, setDpStartDate] = useState(new Date());
   const [dpEndDate, setDpEndDate] = useState(new Date());
   const [errors, setErrors] = useState(new Map<string,string>());
@@ -96,13 +90,13 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
   const [productInserted, setProductInserted] = useState(false);
 
   return (
-    <>
+    <div className="NewFormBoxing mx-auto">
       <Accordion>
         <Card>
           <Card.Header style={{ backgroundColor: "white" }}>
             <div className="d-flex justify-content-center">
               <Accordion.Toggle as={Button} variant="secondary" eventKey="1">
-                Add new product
+                Add new election
               </Accordion.Toggle>
             </div>
           </Card.Header>
@@ -110,10 +104,10 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
             <Card.Body>
               <Form onSubmit={createNewElection}>
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" htmlFor="name">
+                  <FormLabel column sm="3" htmlFor="name">
                     Name
                   </FormLabel>
-                  <Col sm="10">
+                  <Col sm="9">
                     <FormControl
                       type="text"
                       className="sm text-center mb-2"
@@ -129,10 +123,10 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
                   </Col>
                 </FormGroup>
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" htmlFor="type">
+                  <FormLabel column sm="3" htmlFor="type">
                     Type
                   </FormLabel>
-                  <Col sm="10">
+                  <Col sm="9">
                     <FormControl
                       as="select"
                       className="form-control-sm form-control text-center mb-2"
@@ -151,10 +145,10 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
                   </Col>
                 </FormGroup>
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" htmlFor="dpStartDate">
+                  <FormLabel column sm="3" htmlFor="dpStartDate">
                     Start Date
                   </FormLabel>
-                  <Col sm="10">
+                  <Col sm="9">
                     <InputGroup>
                       <DatePicker className="text-center" selected={dpStartDate} onChange={(date: Date) => setDpStartDate(date)} dateFormat='yyyy-MM-dd' />
                     </InputGroup>
@@ -166,10 +160,10 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
                   </Col>
                 </FormGroup>
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" htmlFor="dpEndDate">
+                  <FormLabel column sm="3" htmlFor="dpEndDate">
                     End Date
                   </FormLabel>
-                  <Col sm="10">
+                  <Col sm="9">
                     <InputGroup>
                       <DatePicker className="text-center" selected={dpEndDate} onChange={(date: Date) => setDpEndDate(date)} dateFormat='yyyy-MM-dd' />
                     </InputGroup>
@@ -181,11 +175,11 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
                   </Col>
                 </FormGroup>
                 <FormGroup as={Row}>
-                  <FormLabel column sm="2" htmlFor="parties">
+                  <FormLabel column sm="3" htmlFor="parties">
                     Political Parties
                   </FormLabel>
-                  <Col sm="10">
-                    
+                  <Col sm="9">
+                    {/* TODO : fix sovrapposizione label riducendo la width della finestra */}
                       {
                         parties.map((party: Party) => 
                           <div className="form-control">
@@ -206,7 +200,7 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
               {productInserted &&
                 <Alert variant="success" show={show} onClose={() => setShow(false)} dismissible>
                   <Alert.Heading className="text-center">
-                    Product created successfully!
+                    Election created successfully!
                   </Alert.Heading>
                 </Alert>
               }
@@ -214,7 +208,7 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
           </Accordion.Collapse>
         </Card>
       </Accordion>
-    </>
+    </div>
   );
 };
 

@@ -1,11 +1,14 @@
 import { Election } from "../../classes/Election";
+import { Party } from "../../classes/Party";
 import ElectionDetail from "./ElectionDetail";
 
 interface ElectionListProps {
-    elections: Election[]
+    elections: Election[],
+    parties: Party[],
+    refreshOnElectionsChange: any
 }
 
-const ElectionList = ({ elections }: ElectionListProps) => {
+const ElectionList = ({ elections, parties, refreshOnElectionsChange }: ElectionListProps) => {
     return (
         <table className="table mb-4">
             <thead className="thead-light">
@@ -25,7 +28,7 @@ const ElectionList = ({ elections }: ElectionListProps) => {
                         <td>{election.startDate}</td>
                         <td>{election.endDate}</td>
                         <td>
-                            <ElectionDetail election={election} />
+                            <ElectionDetail election={election} parties={parties} refreshOnElectionsChange={refreshOnElectionsChange} />
                         </td>
                     </tr>
                 )

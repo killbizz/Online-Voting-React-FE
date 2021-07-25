@@ -1,7 +1,7 @@
 import { GetServerSideProps, GetStaticPropsResult } from 'next';
 import NewElection from '../../components/admin/NewElection';
 import Layout from '../../components/Layout'
-import { getParties } from '../../services/party.service';
+import { getParties } from '../../services/party';
 import { Party } from '../../classes/Party';
 import ElectionList from '../../components/admin/ElectionList';
 import { getElections } from '../../services/election';
@@ -38,7 +38,7 @@ const AdminDashboard = ({ partiesArray, electionsArray } : AdminDashboardProps) 
                     <h1 className="text-center mb-4">Admin Dashboard</h1>
                     <h3 className="text-center my-4">Elections</h3>
                     <NewElection parties={parties} refreshOnElectionsChange={refreshOnElectionsChange} />
-                    <ElectionList elections={elections} />
+                    <ElectionList elections={elections} parties={parties} refreshOnElectionsChange={refreshOnElectionsChange} />
                     <h3 className="text-center my-4">Political Parties</h3>
                     <NewParty refreshOnPartiesChange={refreshOnPartiesChange} />
                     <PartyList parties={parties} elections={elections} refreshOnPartiesChange={refreshOnPartiesChange} />
