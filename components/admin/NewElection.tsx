@@ -20,10 +20,11 @@ import { newElection } from "../../services/election";
 import moment from "moment";
 
 interface NewElectionProps {
-  parties: Party[]
+  parties: Party[],
+  refreshOnElectionsChange: any
 }
 
-const NewElection = ({ parties }: NewElectionProps) => {
+const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) => {
 
   const formValidation = (name: string, startDate: Date, endDate: Date): boolean => {
     let isValid: boolean = true;
@@ -83,6 +84,7 @@ const NewElection = ({ parties }: NewElectionProps) => {
       const election: Election = new Election(0, name, type, moment(dpStartDate).format('YYYY-MM-DD'), moment(dpEndDate).format('YYYY-MM-DD'), [], undefined);
 
       const result: boolean = await newElection(election);
+      refreshOnElectionsChange();
       setProductInserted(result);
     }
   }
@@ -114,18 +116,16 @@ const NewElection = ({ parties }: NewElectionProps) => {
                   <Col sm="10">
                     <FormControl
                       type="text"
-                      className="sm text-center"
+                      className="sm text-center mb-2"
                       id="name"
                       name="name"
                       placeholder="Name"
                     />
-                    {errors.has("nameError") ? (
+                    {errors.has("nameError") &&
                       <small id="nameError" className="text-danger">
                         {errors.get("nameError")}
                       </small>
-                    ) : (
-                      <p />
-                    )}
+                    }
                   </Col>
                 </FormGroup>
                 <FormGroup as={Row}>
@@ -135,7 +135,7 @@ const NewElection = ({ parties }: NewElectionProps) => {
                   <Col sm="10">
                     <FormControl
                       as="select"
-                      className="form-control-sm form-control text-center"
+                      className="form-control-sm form-control text-center mb-2"
                       defaultValue="municipal"
                       id="type"
                       name="type"
@@ -143,13 +143,11 @@ const NewElection = ({ parties }: NewElectionProps) => {
                       <option>municipal</option>
                       <option>regional</option>
                     </FormControl>
-                    {errors.has("productCategoryError") ? (
-                      <small id="productCategoryErrors" className="text-danger">
-                        {errors.get("productCategoryError")}
+                    {errors.has("typeError") &&
+                      <small id="typeErrors" className="text-danger">
+                        {errors.get("typeError")}
                       </small>
-                    ) : (
-                      <p />
-                    )}
+                    }
                   </Col>
                 </FormGroup>
                 <FormGroup as={Row}>
@@ -205,15 +203,13 @@ const NewElection = ({ parties }: NewElectionProps) => {
                   </Col>
                 </Form.Row>
               </Form>
-              {productInserted ? (
+              {productInserted &&
                 <Alert variant="success" show={show} onClose={() => setShow(false)} dismissible>
                   <Alert.Heading className="text-center">
                     Product created successfully!
                   </Alert.Heading>
                 </Alert>
-              ) : (
-                <p />
-              )}
+              }
             </Card.Body>
           </Accordion.Collapse>
         </Card>
