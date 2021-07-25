@@ -158,7 +158,7 @@ const NewElection = ({ parties }: NewElectionProps) => {
                   </FormLabel>
                   <Col sm="10">
                     <InputGroup>
-                      <DatePicker className="text-center dp" selected={dpStartDate} onChange={(date: Date) => setDpStartDate(date)} dateFormat='yyyy-MM-dd' />
+                      <DatePicker className="text-center" selected={dpStartDate} onChange={(date: Date) => setDpStartDate(date)} dateFormat='yyyy-MM-dd' />
                     </InputGroup>
                     {errors.has("startDateError") &&
                       <small id="startDateError" className="text-danger">
@@ -173,7 +173,7 @@ const NewElection = ({ parties }: NewElectionProps) => {
                   </FormLabel>
                   <Col sm="10">
                     <InputGroup>
-                      <DatePicker className="text-center dp" selected={dpEndDate} onChange={(date: Date) => setDpEndDate(date)} dateFormat='yyyy-MM-dd' />
+                      <DatePicker className="text-center" selected={dpEndDate} onChange={(date: Date) => setDpEndDate(date)} dateFormat='yyyy-MM-dd' />
                     </InputGroup>
                     {errors.has("endDateError") &&
                       <small id="endDateError" className="text-danger">
