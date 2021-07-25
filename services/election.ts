@@ -37,9 +37,8 @@ export const newElection = async (election: Election): Promise<boolean> => {
   return true;
 }
 
-export const updateElection = async (election: Election): Promise<boolean> => {
-  const { response } = ( await getBackendResponse("election", "PUT", JSON.stringify(election))).props;
-  console.log(response);
+export const updateElection = async (id: number, election: Election): Promise<boolean> => {
+  const { response } = ( await getBackendResponse(`election/${id}`, "PUT", JSON.stringify(election))).props;
   if(response.error !== undefined){
     return false;
   }
@@ -48,7 +47,6 @@ export const updateElection = async (election: Election): Promise<boolean> => {
 
 export const deleteElection = async (id: number): Promise<boolean> => {
   const { response } = ( await getBackendResponse(`election/${id}`, "DELETE", null)).props;
-  console.log(response);
   if(response.error !== undefined){
     return false;
   }
