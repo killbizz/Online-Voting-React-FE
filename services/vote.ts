@@ -1,6 +1,5 @@
 import { Vote } from '../classes/Vote';
 import getBackendResponse from '../pages/api/lib/endpoints';
-import { getUserId } from './auth';
 
 export const getVotes = async (): Promise<Vote[]> => {
   const { response } = (
@@ -20,8 +19,7 @@ export const getVotes = async (): Promise<Vote[]> => {
   })
 }
 
-export const getVotesByUserId = async (): Promise<Vote[]> => {
-  const id: string = getUserId()!;
+export const getVotesByUserId = async (id: string): Promise<Vote[]> => {
   const { response } = (
     await getBackendResponse("vote", "GET", null)
   ).props;
