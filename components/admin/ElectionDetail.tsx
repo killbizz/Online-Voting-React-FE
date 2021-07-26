@@ -133,7 +133,7 @@ const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: Electio
         }
     }
 
-    let partiesInModifiedElection: number[] = [];
+    let partiesInModifiedElection: number[] = Array.from(election.parties);
     const [userWantsToUpdate, setUserWantsToUpdate] = useState(false);
     const [dpStartDate, setDpStartDate] = useState(new Date(election.startDate));
     const [dpEndDate, setDpEndDate] = useState(new Date(election.endDate));
@@ -250,7 +250,7 @@ const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: Electio
                   </Col>
                 </Form.Row>
                 </Form>
-                <Alert variant="success" show={showAlert} onClose={() => setShowAlert(false)} dismissible>
+                <Alert variant="danger" show={showAlert} onClose={() => setShowAlert(false)} dismissible>
                     <Alert.Heading className="text-center">
                         At least one field must be modified!
                     </Alert.Heading>
