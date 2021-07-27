@@ -64,6 +64,8 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
     }
   }
 
+  // TODO : fixare selezione dei partiti
+
   const createNewElection = async (event: any) => {
     event.preventDefault();
 
