@@ -3,29 +3,30 @@ import { Election } from '../../classes/Election';
 import { Party } from '../../classes/Party';
 import ElectionList from '../../components/user/ElectionList';
 import Layout from '../../components/Layout'
-import { getElections } from '../../services/election';
-import { getParties } from '../../services/party';
+import { getElection, getElections } from '../../services/election';
+import { getParties, getParty } from '../../services/party';
 import { useState } from 'react';
 import { Vote } from '../../classes/Vote';
 import { getVotesByUserId } from '../../services/vote';
-import { getUserId } from '../../services/auth';
+import VotingHostory from '../../components/user/VotingHistory';
 
 interface UserDashboardProps {
+    elections: Election[],
     parties: Party[],
-    electionsArray: Election[],
     votesOfTheUser: Vote[],
     userId: string | null
 }
 
-const UserDashboard = ({parties,  electionsArray, votesOfTheUser, userId}: UserDashboardProps ) => {
+const UserDashboard = ({parties,  elections, votesOfTheUser, userId}: UserDashboardProps ) => {
 
-    const refreshOnElectionsChange = async () => {
-        const freshElections = await getElections();
-        setElections(freshElections);
-    };
+    // const [userVotes, setUserVotes] = useState(votesOfTheUser);
+    let userRelatedElections: Election[] = [];
+    let userRetaledParties: Party[] = [];
 
-    const [elections, setElections] = useState(electionsArray);
-    const [userVotes, setUserVotes] = useState(votesOfTheUser);
+    for(const vote of votesOfTheUser){
+      userRelatedElections.push(elections.find((value) => value.id === vote.electionId)!);
+      userRetaledParties.push(parties.find((value) => value.id === vote.partyId)!);
+    }
 
     return (
         <Layout title="e-Voting User Dashboard">
@@ -34,10 +35,9 @@ const UserDashboard = ({parties,  electionsArray, votesOfTheUser, userId}: UserD
                 <div>
                     <h1 className="text-center mb-4">User Dashboard</h1>
                     <h3 className="text-center my-4">Elections</h3>
-                    <ElectionList elections={elections} userVotes={userVotes} userId={userId} />
+                    <ElectionList elections={elections} userVotes={votesOfTheUser} userId={userId} />
                     <h3 className="text-center my-4">Voting History</h3>
-                    
-                    
+                    <VotingHostory userRelatedElections={userRelatedElections} userRelatedParties={userRetaledParties} userVotes={votesOfTheUser} />
                 </div>
             </div>
         </div>
@@ -55,12 +55,16 @@ export const getServerSideProps: GetServerSideProps<UserDashboardProps> = async 
         },
       };
     }
+
     const id: string | undefined = req.cookies.userId;
+    const votesOfTheUser = await getVotesByUserId(id!);
+    const elections = await getElections();
+    const parties = await getParties();
     return {
       props: {
-        parties: await getParties(),
-        electionsArray: await getElections(),
-        votesOfTheUser: await getVotesByUserId(id!),
+        elections: elections,
+        parties: parties,
+        votesOfTheUser: votesOfTheUser,
         userId: id === undefined ? null : id
       }
     };
