@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { signIn } from '../../services/auth';
 import { useState } from 'react';
 import Router from 'next/router'
+import { Alert } from 'react-bootstrap';
 
 const login = () => {
     const [errors, setErrors] = useState(new Map<string,string>());
@@ -23,7 +24,11 @@ const login = () => {
 
         if(valid){
             const result: boolean = await signIn(email, password);
-            Router.push("/");
+            if(result) {
+                Router.push("/");
+            } else {
+                setShowAlert(true);
+            }
         }
     }
 
@@ -55,6 +60,8 @@ const login = () => {
         return isValid;
     }
 
+    const [showAlert, setShowAlert] = useState(false);
+
     return (
         <Layout title="Login page">
             <div className="container">
@@ -85,6 +92,11 @@ const login = () => {
                         <Link href="/sign-up">
                             <a className="mt-3">Sign Up</a>
                         </Link>
+                        <Alert variant="danger" show={showAlert} onClose={() => setShowAlert(false)} dismissible>
+                            <Alert.Heading className="text-center">
+                                Login Failed, please try again!
+                            </Alert.Heading>
+                        </Alert>
                 </div>
             </div>
         </Layout>
