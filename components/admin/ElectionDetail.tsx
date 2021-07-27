@@ -31,7 +31,8 @@ const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: Electio
             startDate = startDate === "" ? election.startDate : startDate;
             endDate = endDate === "" ? election.endDate : endDate;
             partiesInModifiedElection = partiesInModifiedElection.length === 0 ? election.parties : partiesInModifiedElection;
-            const updatedElection: Election = new Election(election.id, name, type, moment(dpStartDate).format('YYYY-MM-DD'), moment(dpEndDate).format('YYYY-MM-DD'), partiesInModifiedElection, election.votes);
+            const updatedElection: Election = new Election(election.id, name, type, moment(dpStartDate).format('YYYY-MM-DD'), 
+              moment(dpEndDate).format('YYYY-MM-DD'), partiesInModifiedElection, election.votes);
     
             await updateElection(election.id, updatedElection);
             refreshOnElectionsChange();
@@ -41,8 +42,8 @@ const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: Electio
 
     const formValidation = (name: string, type: string, startDate: Date, endDate: Date, parties: number[]): boolean => {
         // Check if there is at least one valid input
-        if(name === election.name && type === election.type && moment(startDate).format('YYYY-MM-DD'), moment(dpEndDate).format('YYYY-MM-DD') === election.startDate && 
-        moment(dpStartDate).format('YYYY-MM-DD'), moment(endDate).format('YYYY-MM-DD') === election.endDate && arraysEqual(partiesInModifiedElection, election.parties)){
+        if(name === election.name && type === election.type && moment(startDate).format('YYYY-MM-DD') === election.startDate && 
+          moment(endDate).format('YYYY-MM-DD') === election.endDate && arraysEqual(partiesInModifiedElection, election.parties)){
             setShowAlert(true);
             return false;
         }
@@ -204,7 +205,8 @@ const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: Electio
                   </FormLabel>
                   <Col sm="10">
                     <InputGroup>
-                      <DatePicker name="dpStartDate" disabled={userWantsToUpdate ? undefined : true} className="text-center" selected={dpStartDate} onChange={(date: Date) => setDpStartDate(date)} dateFormat='yyyy-MM-dd' />
+                      <DatePicker name="dpStartDate" disabled={userWantsToUpdate ? undefined : true} className="text-center" 
+                      selected={dpStartDate} onChange={(date: Date) => setDpStartDate(date)} dateFormat='yyyy-MM-dd' />
                     </InputGroup>
                     {errors.has("startDateError") &&
                       <small id="startDateError" className="text-danger">
@@ -219,7 +221,8 @@ const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: Electio
                   </FormLabel>
                   <Col sm="10">
                     <InputGroup>
-                      <DatePicker name="dpEndDate" disabled={userWantsToUpdate ? undefined : true} className="text-center" selected={dpEndDate} onChange={(date: Date) => setDpEndDate(date)} dateFormat='yyyy-MM-dd' />
+                      <DatePicker name="dpEndDate" disabled={userWantsToUpdate ? undefined : true} className="text-center" 
+                      selected={dpEndDate} onChange={(date: Date) => setDpEndDate(date)} dateFormat='yyyy-MM-dd' />
                     </InputGroup>
                     {errors.has("endDateError") &&
                       <small id="endDateError" className="text-danger">
