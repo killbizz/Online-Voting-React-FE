@@ -90,14 +90,14 @@ const NavigationBar = () => {
                     </Nav.Item>
                     {isUserLoggedIn() && !isUserAdmin() &&
                     <Nav.Item>
-                        <Link href="user-dashboard">
+                        <Link href="/user-dashboard">
                             <a className="nav-link">Elections</a>
                         </Link>
                     </Nav.Item>
                     }
                     {isUserLoggedIn() && isUserAdmin() &&
                     <Nav.Item>
-                        <Link href="admin-dashboard">
+                        <Link href="/admin-dashboard">
                             <a className="nav-link">Admin Dashboard</a>
                         </Link>
                     </Nav.Item>

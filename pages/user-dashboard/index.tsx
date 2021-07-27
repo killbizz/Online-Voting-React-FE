@@ -50,12 +50,12 @@ export const getServerSideProps: GetServerSideProps<UserDashboardProps> = async 
     if(!(req.cookies.jwtToken !== undefined && req.cookies.userRole !== "admin")) {
       return {
         redirect: {
-          destination: "/",
+          destination: "/login",
           permanent: false,
         },
       };
     }
-    const id: string | undefined = getUserId();
+    const id: string | undefined = req.cookies.userId;
     return {
       props: {
         parties: await getParties(),

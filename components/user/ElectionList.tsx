@@ -51,7 +51,7 @@ const ElectionList = ({ elections, userVotes, userId }: ElectionListProps) => {
                             </>
                             }
                             { votePossibility(election.id, election.startDate, election.endDate) &&
-                            <button type="button" className="btn btn-secondary btn-sm px-4 me-md-2" onClick={() => Router.push(`election/${election.id}`)}>Vote!</button>
+                            <button type="button" className="btn btn-secondary btn-sm px-4 me-md-2" onClick={() => Router.push(`election-page/${election.id}`)}>Vote!</button>
                             }
                         </td>
                     </tr>
