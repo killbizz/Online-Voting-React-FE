@@ -1,12 +1,11 @@
 import Link from 'next/link'
 import Layout from '../../components/Layout'
-import Image from 'next/image'
 import { signIn } from '../../services/auth';
 import { useState } from 'react';
 import Router from 'next/router'
 import { Alert } from 'react-bootstrap';
 
-const login = () => {
+const Login = () => {
     const [errors, setErrors] = useState(new Map<string,string>());
 
     // passing a clone o errors map to setErrors in order to trigger the state update
@@ -67,7 +66,7 @@ const login = () => {
             <div className="container">
                 <div className="login">
                         <h1 className="my-4">Login</h1>
-                        <Image className="loginSignUpImages" src="/images/login.png" alt="Login Image" width="180" height="180" />  
+                        <img className="loginSignUpImages" src="/images/login.png" alt="Login Image" width="180" height="180" />  
                         <form method="POST" name="loginForm" className="my-3" onSubmit={signInHandling}>
                         <div className="form-floating">
                             <input type="text" className="form-control" id="email" name="email" placeholder="name@example.com" />
@@ -103,4 +102,4 @@ const login = () => {
     );
 };
 
-export default login
+export default Login;
