@@ -181,12 +181,11 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
                     Political Parties
                   </FormLabel>
                   <Col sm="9">
-                    {/* TODO : fix sovrapposizione label riducendo la width della finestra */}
                       {
                         parties.map((party: Party) => 
-                          <div className="form-control">
-                            <input className="mx-2" type="checkbox" name={party.name} value={party.id} onClick={() => handlePartyClick(party.id)} />
-                            <label className="checkbox-inline mx-1" htmlFor={party.name.toString()}>{party.name} - {party.candidate}</label>
+                          <div className="border border-secondary rounded my-1">
+                            <input className="col-auto mx-2" type="checkbox" name={party.name} value={party.id} onClick={() => handlePartyClick(party.id)} />
+                            <label className="col-auto mx-1" htmlFor={party.name.toString()}>{party.name} - {party.candidate}</label>
                           </div>)
                       }
                   </Col>

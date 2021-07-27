@@ -105,7 +105,7 @@ const NavigationBar = () => {
                     </Nav>
                     {!isUserLoggedIn() && !(router.pathname === "/login" || router.pathname === "/sign-up") &&
                     <ul className="navbar-nav">
-                        <div className="nav-item text-nowrap px-3">
+                        <div className="nav-item text-nowrap">
                             <Link href="/login">
                             <a className="nav-link">Login</a>
                             </Link>
@@ -114,7 +114,7 @@ const NavigationBar = () => {
                     }
                     {isUserLoggedIn() && !(router.pathname === "/login" || router.pathname === "/sign-up") &&
                     <ul className="navbar-nav">
-                        <div className="nav-item text-nowrap px-3">
+                        <div className="nav-item text-nowrap">
                             <a className="nav-link" href="" onClick={logoutHandling}>Logout</a>
                         </div>
                     </ul>
