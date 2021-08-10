@@ -9,7 +9,6 @@ import { newVote } from '../../services/vote';
 import Router from 'next/router';
 import { Vote } from '../../classes/Vote';
 import moment from 'moment';
-import { getUserId } from '../../services/auth';
 import { Accordion, Card, Button, Modal } from 'react-bootstrap';
 
 interface ElectionPageProps {
@@ -131,7 +130,7 @@ export const getServerSideProps: GetServerSideProps<ElectionPageProps> = async (
         },
       };
     }
-    const election: Election = await getElection(Number(params!.id));
+    const election: Election | undefined = await getElection(Number(params!.id));
     let parties: Party[] = [];
     for(const party of election.parties){
       parties.push(await getParty(party));
