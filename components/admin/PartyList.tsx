@@ -48,9 +48,9 @@ const PartyList = ({ parties, elections, refreshOnPartiesChange }: PartyListProp
                         <td>
                             { !deletePossibility(party.id) &&
                             <>
-                                <ReactTooltip place="right" />
+                                <ReactTooltip place="bottom" type="dark" effect="solid"/>
                                 <span className="d-inline-block" tabIndex={0} data-tip="This party is present in an old votation or in one that is currently open">
-                                    <button type="button" disabled={!deletePossibility(party.id)} className="btn btn-danger btn-sm px-4 me-md-2" onClick={ () => deleteSelectedParty(party.id)}>Delete</button>
+                                    <button type="button" disabled={!deletePossibility(party.id)} className="btn btn-danger btn-sm px-4 me-md-2">Delete</button>
                                 </span>
                             </>
                             }

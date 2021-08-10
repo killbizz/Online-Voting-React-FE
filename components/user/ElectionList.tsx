@@ -44,7 +44,7 @@ const ElectionList = ({ elections, userVotes, userId }: ElectionListProps) => {
                         <td>
                             { !votePossibility(election.id, election.startDate, election.endDate) &&
                             <>
-                                <ReactTooltip place="right" />
+                                <ReactTooltip place="right" effect="solid" />
                                 <span className="d-inline-block" tabIndex={0} data-tip={userAlreadyVoted(election.id) ? alreadyVoted : timingIssue}>
                                     <button type="button" disabled className="btn btn-outline-secondary btn-sm px-4 me-md-2">Vote!</button>
                                 </span>

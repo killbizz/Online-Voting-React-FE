@@ -262,7 +262,7 @@ const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: Electio
                 <Modal.Footer>
                 { !updateOrDeletePossibility() && 
                 <>
-                    <ReactTooltip />
+                    <ReactTooltip effect="solid" />
                     <span className="d-inline-block" tabIndex={0} data-tip="This election has already ended or is in progress right now">
                         <button type="button" disabled={updateOrDeletePossibility() ? undefined : true} className="btn btn-warning btn-sm px-4 me-md-2" onClick={enableUpdateElection}>Edit</button>
                     </span>
@@ -274,7 +274,7 @@ const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: Electio
                 {
                 !updateOrDeletePossibility() && 
                 <>
-                    <ReactTooltip />
+                    <ReactTooltip effect="solid" />
                     <span className="d-inline-block" tabIndex={0} data-tip="This election has already ended or is in progress right now">
                         <button type="button" disabled={updateOrDeletePossibility() ? undefined : true} className="btn btn-danger btn-sm px-4 me-md-2" >Delete</button>
                     </span>
