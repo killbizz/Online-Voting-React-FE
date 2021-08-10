@@ -51,7 +51,7 @@ const AdminDashboard = ({ partiesArray, electionsArray } : AdminDashboardProps) 
 
 export const getServerSideProps: GetServerSideProps<AdminDashboardProps> = async ({ req }): Promise<GetStaticPropsResult<AdminDashboardProps>> => {
   // session handling using cookies
-  if(!(req.cookies.jwtToken !== undefined && req.cookies.userRole === "admin")) {
+  if(!(req.cookies.userId !== undefined && req.cookies.userRole === "admin")) {
     return {
       redirect: {
         destination: "/login",

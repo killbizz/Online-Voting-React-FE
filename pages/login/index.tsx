@@ -1,11 +1,16 @@
 import Link from 'next/link'
 import Layout from '../../components/Layout'
-import { signIn } from '../../services/auth';
+import { isUserLoggedIn, signIn } from '../../services/auth';
 import { useState } from 'react';
 import Router from 'next/router'
 import { Alert } from 'react-bootstrap';
 
 const Login = () => {
+
+    if(isUserLoggedIn()) {
+        Router.push("/");
+    }
+
     const [errors, setErrors] = useState(new Map<string,string>());
 
     // passing a clone o errors map to setErrors in order to trigger the state update

@@ -123,7 +123,7 @@ const ElectionPage = ({ parties, election, userId }: ElectionPageProps) => {
 
 export const getServerSideProps: GetServerSideProps<ElectionPageProps> = async ({params, req }): Promise<GetStaticPropsResult<ElectionPageProps>> => {
     // session handling using cookies
-    if((req.cookies.jwtToken === undefined || req.cookies.userRole === "admin")) {
+    if((req.cookies.userId === undefined || req.cookies.userRole === "admin")) {
       return {
         redirect: {
           destination: "/login",

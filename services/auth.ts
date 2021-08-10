@@ -3,7 +3,7 @@ import getBackendResponse from '../pages/api/lib/endpoints';
 import cookie from 'js-cookie';
 
 export const isUserLoggedIn = () : boolean | undefined => {
-  return !!cookie.get("jwtToken");
+  return !!cookie.get("userId");
 }
 
 export const isUserAdmin = () : boolean | undefined => {
@@ -18,7 +18,7 @@ export const signIn = async (email: string, password: string): Promise<boolean> 
   const { response } = (
     await getBackendResponse("login", "POST", JSON.stringify(credentials))
   ).props;
-  if (response.jwtToken === undefined) {
+  if (response.userId === undefined) {
     return false;
   }
   // API calls to set secure cookies
@@ -44,7 +44,7 @@ export const signIn = async (email: string, password: string): Promise<boolean> 
   //   body: JSON.stringify({ userId: response.userId })
   // });
   // dummy cookie set
-  cookie.set("jwtToken", response.jwtToken);
+  cookie.set("username", response.username);
   cookie.set("userRole", response.role);
   cookie.set("userId", response.userId);
   return true;
@@ -70,7 +70,7 @@ export const logout = (): void => {
     body: JSON.stringify({})
   });
   // dummy cookie delete
-  cookie.remove("jwtToken");
+  cookie.remove("username");
   cookie.remove("userRole");
   cookie.remove("userId");
 }

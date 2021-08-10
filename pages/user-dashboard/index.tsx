@@ -47,7 +47,7 @@ const UserDashboard = ({parties,  elections, votesOfTheUser, userId}: UserDashbo
 
 export const getServerSideProps: GetServerSideProps<UserDashboardProps> = async ({ req }): Promise<GetStaticPropsResult<UserDashboardProps>> => {
     // session handling using cookies
-    if(!(req.cookies.jwtToken !== undefined && req.cookies.userRole !== "admin")) {
+    if(!(req.cookies.userId !== undefined && req.cookies.userRole !== "admin")) {
       return {
         redirect: {
           destination: "/login",
