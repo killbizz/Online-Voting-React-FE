@@ -9,7 +9,7 @@ import moment from "moment";
 
 interface NewElectionProps {
   parties: Party[],
-  refreshOnElectionsChange: any
+  refreshOnElectionsChange: any,
 }
 
 const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) => {
@@ -55,6 +55,15 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
     setErrors(new Map<string,string>(errors.set(key,value)));
   }
 
+  const unCheck = () => {
+    var x: any = document.getElementsByClassName("checkbox");
+    console.log(x)
+    for(var i=0; i<x.length; i++) {
+      console.log(x[i])
+      x[i].checked = false;
+    }   
+  }
+
   const handlePartyClick = (id: number) => {
     const idx: number = partiesInNewElection.indexOf(id);
     if(idx > -1){
@@ -63,8 +72,6 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
       partiesInNewElection.push(id);
     }
   }
-
-  // TODO : fixare selezione dei partiti
 
   const createNewElection = async (event: any) => {
     event.preventDefault();
@@ -75,13 +82,21 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
     const valid: boolean = formValidation(name, dpStartDate, dpEndDate);
 
     if(valid){
-
       const election: Election = new Election(0, name, type, moment(dpStartDate).format('YYYY-MM-DD'), moment(dpEndDate).format('YYYY-MM-DD'), partiesInNewElection , undefined);
-
       const result: boolean = await newElection(election);
       refreshOnElectionsChange();
       setProductInserted(result);
+
+      // reset form
+      event.target.name.value = "";
+      event.target.type.value = "municipal";
+      setDpStartDate(new Date());
+      setDpEndDate(new Date());
+      // unCheckAll();
+      unCheck();
+      partiesInNewElection = [];
     }
+    setProductInserted(false);
   }
   
   let partiesInNewElection: number[] = [];
@@ -184,7 +199,7 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
                       {
                         parties.map((party: Party) => 
                           <div className="border border-secondary rounded my-1">
-                            <input className="col-auto mx-2" type="checkbox" name={party.name} value={party.id} onClick={() => handlePartyClick(party.id)} />
+                            <input className="col-auto mx-2 checkbox" type="checkbox" id={party.id.toString()} value={party.id} onClick={() => handlePartyClick(party.id)} />
                             <label className="col-auto mx-1" htmlFor={party.name.toString()}>{party.name} - {party.candidate}</label>
                           </div>)
                       }
