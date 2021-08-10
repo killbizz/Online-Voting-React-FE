@@ -62,13 +62,13 @@ export const signUp = async (user: User) : Promise<boolean> => {
 
 export const logout = (): void => {
   // API calls to delete cookies
-  fetch("/api/auth/logout", {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({})
-  });
+  // fetch("/api/auth/logout", {
+  //   method: "post",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({})
+  // });
   // dummy cookie delete
   cookie.remove("username");
   cookie.remove("userRole");
@@ -77,4 +77,8 @@ export const logout = (): void => {
 
 export const getUserId = (): string | undefined => {
   return cookie.get("userId");
+}
+
+export const getUsername = (): string | undefined => {
+  return cookie.get("username");
 }
