@@ -1,6 +1,4 @@
-import { UserInterface } from './../interfaces/UserInterface';
-
-export class User implements UserInterface {
+export class User {
     email: string;
     password: string;
     username: string;
