@@ -5,7 +5,12 @@ export default class Fetcher {
 
   constructor(funName: string) {
     this.url = new URL(
-      `http://localhost:8080/${funName}`
+      // Google App Engine
+      `https://voting-online-335815.oa.r.appspot.com/${funName}`
+      // Google Compute Engine
+      //`http://34.65.39.5:8080/${funName}`
+      //`http://localhost:8080/${funName}`
+      //`http://79.41.14.189:8080/${funName}`
     );
   }
 
