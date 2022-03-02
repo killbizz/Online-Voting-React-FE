@@ -3,12 +3,11 @@ import { Election } from '../../classes/Election';
 import { Party } from '../../classes/Party';
 import ElectionList from '../../components/user/ElectionList';
 import Layout from '../../components/Layout'
-import { getElection, getElections } from '../../services/election';
-import { getParties, getParty } from '../../services/party';
-import { useState } from 'react';
+import { getElections } from '../../services/election';
+import { getParties } from '../../services/party';
 import { Vote } from '../../classes/Vote';
 import { getVotesByUserId } from '../../services/vote';
-import VotingHostory from '../../components/user/VotingHistory';
+import VotingHistory from '../../components/user/VotingHistory';
 
 interface UserDashboardProps {
     elections: Election[],
@@ -19,7 +18,6 @@ interface UserDashboardProps {
 
 const UserDashboard = ({parties,  elections, votesOfTheUser, userId}: UserDashboardProps ) => {
 
-    // const [userVotes, setUserVotes] = useState(votesOfTheUser);
     let userRelatedElections: Election[] = [];
     let userRetaledParties: Party[] = [];
 
@@ -37,7 +35,7 @@ const UserDashboard = ({parties,  elections, votesOfTheUser, userId}: UserDashbo
                     <h3 className="text-center my-4">Elections</h3>
                     <ElectionList elections={elections} userVotes={votesOfTheUser} userId={userId} />
                     <h3 className="text-center my-4">Voting History</h3>
-                    <VotingHostory userRelatedElections={userRelatedElections} userRelatedParties={userRetaledParties} userVotes={votesOfTheUser} />
+                    <VotingHistory userRelatedElections={userRelatedElections} userRelatedParties={userRetaledParties} userVotes={votesOfTheUser} />
                 </div>
             </div>
         </div>

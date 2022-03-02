@@ -8,7 +8,7 @@ interface VotingHistoryProps {
     userVotes: Vote[]
 }
 
-const VotingHostory = ({ userRelatedElections, userRelatedParties, userVotes }: VotingHistoryProps) => {
+const VotingHistory = ({ userRelatedElections, userRelatedParties, userVotes }: VotingHistoryProps) => {
 
     const getCorrispondingElection = (id: number) => {
         return userRelatedElections.find((value) => value.id === id);
@@ -46,4 +46,4 @@ const VotingHostory = ({ userRelatedElections, userRelatedParties, userVotes }: 
     );
 }
 
-export default VotingHostory;
+export default VotingHistory;

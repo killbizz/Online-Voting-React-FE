@@ -14,10 +14,14 @@ const PartyList = ({ parties, elections, refreshOnPartiesChange }: PartyListProp
         const today = new Date(new Date().toDateString());
         today.setHours(23,59,59,999);
         let removable: boolean = true;
-        elections.filter((value) => value.parties.indexOf(id) > -1).forEach((value) => {
-            if(new Date(value.startDate) < today){
-                removable =  false;
-            }
+        // elections.filter((value) => value.parties.indexOf(id) > -1).forEach((value) => {
+        //     if(new Date(value.startDate) < today){
+        //         removable =  false;
+        //     }
+        // });
+        elections.forEach((value) => {
+            if(value.parties.indexOf(id) > -1)
+                removable = false;
         });
         return removable;
     }
@@ -49,7 +53,7 @@ const PartyList = ({ parties, elections, refreshOnPartiesChange }: PartyListProp
                             { !deletePossibility(party.id) &&
                             <>
                                 <ReactTooltip place="bottom" type="dark" effect="solid"/>
-                                <span className="d-inline-block" tabIndex={0} data-tip="This party is present in an old votation or in one that is currently open">
+                                <span className="d-inline-block" tabIndex={0} data-tip="This party is present in al least one votation">
                                     <button type="button" disabled={!deletePossibility(party.id)} className="btn btn-danger btn-sm px-4 me-md-2">Delete</button>
                                 </span>
                             </>

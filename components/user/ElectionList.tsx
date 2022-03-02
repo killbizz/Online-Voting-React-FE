@@ -23,7 +23,7 @@ const ElectionList = ({ elections, userVotes, userId }: ElectionListProps) => {
     }
 
     const alreadyVoted: string = "You have already voted for this election";
-    const timingIssue: string = "This election is terminated or is not already openend";
+    const timingIssue: string = "This election is terminated or is not already opened";
 
     return (
         <table className="table mb-4">
