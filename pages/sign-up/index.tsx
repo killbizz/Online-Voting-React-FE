@@ -84,7 +84,7 @@ const SignUp = () => {
         <Layout title="Login page">
             <div className="container">
                 <div className="sign-up">
-                        <h1 className="my-4">Sign Up</h1>
+                        <h1 className="my-3">Sign Up</h1>
                         <img className="loginSignUpImages" src="/images/sign_up2.png" alt="Login Image" width="180" height="180" />  
                         <form method="POST" name="loginForm" className="my-3" onSubmit={signInHandling}>
                         <div className="form-floating">

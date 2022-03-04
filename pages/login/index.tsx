@@ -70,7 +70,7 @@ const Login = () => {
         <Layout title="Login page">
             <div className="container">
                 <div className="login">
-                        <h1 className="my-4">Login</h1>
+                        <h1 className="my-3">Login</h1>
                         <img className="loginSignUpImages" src="/images/login.png" alt="Login Image" width="180" height="180" />  
                         <form method="POST" name="loginForm" className="my-3" onSubmit={signInHandling}>
                         <div className="form-floating">
