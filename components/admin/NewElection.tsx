@@ -56,10 +56,8 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
   }
 
   const unCheck = () => {
-    var x: any = document.getElementsByClassName("checkbox");
-    console.log(x)
+    let x: HTMLCollectionOf<HTMLInputElement> = document.getElementsByClassName("checkbox") as HTMLCollectionOf<HTMLInputElement>;
     for(var i=0; i<x.length; i++) {
-      console.log(x[i])
       x[i].checked = false;
     }   
   }
@@ -82,7 +80,7 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
     const valid: boolean = formValidation(name, dpStartDate, dpEndDate);
 
     if(valid){
-      const election: Election = new Election(0, name, type, moment(dpStartDate).format('YYYY-MM-DD'), moment(dpEndDate).format('YYYY-MM-DD'), partiesInNewElection , undefined);
+      const election: Election = new Election(0, name, type, moment(dpStartDate).format('YYYY-MM-DD'), moment(dpEndDate).format('YYYY-MM-DD'), Object.assign([], partiesInNewElection) , undefined);
       const result: boolean = await newElection(election);
       refreshOnElectionsChange();
       setProductInserted(result);
@@ -92,9 +90,8 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
       event.target.type.value = "municipal";
       setDpStartDate(new Date());
       setDpEndDate(new Date());
-      // unCheckAll();
       unCheck();
-      partiesInNewElection = [];
+      partiesInNewElection.splice(0,partiesInNewElection.length)
     }
     setProductInserted(false);
   }
@@ -111,7 +108,7 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
       <Accordion>
         <Card>
           <Card.Header style={{ backgroundColor: "white" }}>
-            <div className="d-flex justify-content-center">
+            <div key={"accordionContainer"} className="d-flex justify-content-center">
               <Accordion.Toggle as={Button} variant="secondary" eventKey="1">
                 Add new election
               </Accordion.Toggle>
@@ -198,7 +195,7 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
                   <Col sm="9">
                       {
                         parties.map((party: Party) => 
-                          <div className="border border-secondary rounded my-1">
+                          <div key={party.id} className="border border-secondary rounded my-1">
                             <input className="col-auto mx-2 checkbox" type="checkbox" id={party.id.toString()} value={party.id} onClick={() => handlePartyClick(party.id)} />
                             <label className="col-auto mx-1" htmlFor={party.name.toString()}>{party.name} - {party.candidate}</label>
                           </div>)
