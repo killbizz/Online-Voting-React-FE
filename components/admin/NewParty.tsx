@@ -25,12 +25,12 @@ const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
 
         const name: string = event.target.name.value;
         const candidate: string = event.target.candidate.value;
-        const logoFile: string | undefined = event.target.logo.files[0];
+        const logoFile: any = event.target.logo;
 
         const valid: boolean = formValidation(name, candidate, logoFile);
 
         if(valid){
-            const base64logo = await fileToBase64(logoFile);
+            const base64logo = await fileToBase64(logoFile.files[0]);
 
             const party: Party = new Party(0, name, candidate, base64logo);
             const result: boolean = await newParty(party);
@@ -39,8 +39,17 @@ const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
         }
     }
 
-    const formValidation = (name: string, candidate: string, logo: string | undefined): boolean => {
+    const formValidation = (name: string, candidate: string, logo: any): boolean => {
         let isValid: boolean = true;
+
+        let sizeFile: any;
+        // max 50Kb files
+        const maxSize: number = 50000;
+        if(logo.files.length > 0){
+            const [{ size }] = logo.files;
+            sizeFile = size;
+        }
+
         if (name === "") {
           updateErrors("nameError", "The Name field is required");
           isValid = false;
@@ -63,20 +72,24 @@ const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
         else {
         updateErrors("candidateError", "");
         }
-        if (logo === undefined) {
+        if (logo.files[0] === undefined) {
             updateErrors("logoError", "The Party Logo is required");
             isValid = false;
         }
+        else if (sizeFile > maxSize) {
+            updateErrors("logoError", "The max allowed size of a file is 50KB");
+            isValid = false;
+            }
         else {
         updateErrors("logoError", "");
         }
         return isValid;
-      }
+    }
     
       // passing a clone o errors map to setErrors in order to trigger the state update
       const updateErrors = (key: string, value: string) => {
         setErrors(new Map<string,string>(errors.set(key,value)));
-      }
+    }
 
     const [errors, setErrors] = useState(new Map<string,string>());
     const [show, setShow] = useState(true);
