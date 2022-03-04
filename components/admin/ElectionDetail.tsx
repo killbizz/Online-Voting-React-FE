@@ -239,7 +239,7 @@ const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: Electio
                     
                       {
                         parties.map((party: Party) => 
-                          <div className="form-control">
+                          <div key={party.id} className="form-control">
                             <input className="mx-2" type="checkbox" disabled={userWantsToUpdate ? undefined : true} defaultChecked={election.parties.indexOf(party.id) > -1 ? true : undefined} name={party.name} value={party.id} onClick={() => handlePartyClick(party.id)} />
                             <label className="checkbox-inline mx-1" htmlFor={party.name.toString()}>{party.name} - {party.candidate}</label>
                           </div>)

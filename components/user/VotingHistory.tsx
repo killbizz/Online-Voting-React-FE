@@ -21,7 +21,7 @@ const VotingHistory = ({ userRelatedElections, userRelatedParties, userVotes }: 
     return (
         <table className="table mb-4">
             <thead className="thead-light">
-            <tr>
+            <tr key={"votingHistoryListHeader"}>
                 <th scope="col">Election Name</th>
                 <th scope="col">Election Start Date</th>
                 <th scope="col">Election End Date</th>
@@ -32,7 +32,7 @@ const VotingHistory = ({ userRelatedElections, userRelatedParties, userVotes }: 
             <tbody>
                 {
                     userVotes.map((vote) => 
-                        <tr>
+                        <tr key={vote.id}>
                             <td>{getCorrispondingElection(vote.electionId)!.name}</td>
                             <td>{getCorrispondingElection(vote.electionId)!.startDate}</td>
                             <td>{getCorrispondingElection(vote.electionId)!.endDate}</td>

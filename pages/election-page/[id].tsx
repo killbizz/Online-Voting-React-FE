@@ -80,7 +80,7 @@ const ElectionPage = ({ parties, election, userId }: ElectionPageProps) => {
                     <div className="row">
                       {
                         parties.map((party) => 
-                        <div className="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                        <div key={party.id} className="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                           <a href="" onClick={(event) => selectParty(party.id,event)}>
                               <div className="card-flyer">
                                   <div className="text-box">

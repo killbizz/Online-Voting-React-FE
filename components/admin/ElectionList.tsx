@@ -12,7 +12,7 @@ const ElectionList = ({ elections, parties, refreshOnElectionsChange }: Election
     return (
         <table className="table mb-4">
             <thead className="thead-light">
-            <tr>
+            <tr key={"adminElectionListHeader"}>
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
                 <th scope="col">Start Date</th>
@@ -22,7 +22,7 @@ const ElectionList = ({ elections, parties, refreshOnElectionsChange }: Election
             </thead>
             <tbody>
                 {elections.map((election) => 
-                    <tr>
+                    <tr key={election.id}>
                         <th scope="row">{election.id}</th>
                         <td>{election.name}</td>
                         <td>{election.startDate}</td>
