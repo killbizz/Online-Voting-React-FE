@@ -60,7 +60,7 @@ const NavigationBar = () => {
                     {isUserLoggedIn() && !(router.pathname === "/login" || router.pathname === "/sign-up") &&
                     <ul className="navbar-nav">
                         <div className="nav-item text-nowrap mt-3">
-                            <p className="nav-link active">Hello {getUsername()!}</p>
+                            <p className="nav-link active">Hello {isUserAdmin() ? "Administrator" : getUsername()!}</p>
                         </div>
                         <div className="nav-item text-nowrap mt-3">
                             <a className="nav-link" href="" onClick={logoutHandling}>Logout</a>
