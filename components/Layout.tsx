@@ -3,9 +3,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { ReactNode } from 'react'
 import Head from 'next/head'
 import Footer from './footer/Footer'
-
 // to avoid warning due to Next.js SSR
 import dynamic from 'next/dynamic'
+
 const NavigationBar = dynamic(() => import('./navbar/NavigationBar'), { ssr: false })
 
 type Props = {
