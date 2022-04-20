@@ -1,3 +1,4 @@
+import { startLoadingBar, stopLoadingBar } from './../pages/api/lib/loading';
 import { User } from '../classes/User';
 import getBackendResponse from '../pages/api/lib/endpoints';
 import cookie from 'js-cookie';
@@ -11,13 +12,18 @@ export const isUserAdmin = () : boolean | undefined => {
 }
 
 export const signIn = async (email: string, password: string): Promise<boolean> => {
+
   const credentials = {
     email: email,
     password: password
   };
+
+  startLoadingBar();
+
   const { response } = (
     await getBackendResponse("login", "POST", JSON.stringify(credentials))
   ).props;
+
   if (response.userId === undefined) {
     return false;
   }
@@ -47,16 +53,26 @@ export const signIn = async (email: string, password: string): Promise<boolean> 
   cookie.set("username", response.username);
   cookie.set("userRole", response.role);
   cookie.set("userId", response.userId);
+
+  stopLoadingBar();
+
   return true;
 }
 
 export const signUp = async (user: User) : Promise<boolean> => {
+
+  startLoadingBar();
+
   const { response } = (
     await getBackendResponse("user", "POST", JSON.stringify(user))
   ).props;
+
   if (response.code !== undefined) {
     return false;
   }
+
+  stopLoadingBar();
+
   return true;
 }
 
