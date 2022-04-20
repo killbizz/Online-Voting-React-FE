@@ -9,7 +9,7 @@ export default class Fetcher {
       // Google App Engine
       //`https://voting-online-342816.oa.r.appspot.com/${funName}`
       // Google Compute Engine
-      `${process.env.BACKEND_URL}/${funName}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/${funName}`
     );
   }
 
