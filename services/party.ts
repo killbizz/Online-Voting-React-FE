@@ -19,6 +19,26 @@ export const getParties = async (): Promise<Party[]> => {
   })
 }
 
+export const getPartiesById = async (partiesId: number[]): Promise<Party[]> => {
+
+  const { response } = (
+    await getBackendResponse("party", "GET", null)
+  ).props;
+  if (partiesId.length === 0 || response._embedded === undefined) {
+    return [];
+  }
+  return response._embedded.party.filter((party: Party) => partiesId.findIndex((value: number) => value === party.id ) > -1 )
+    .sort((a: Party ,b : Party) => {
+      if(a.name < b.name){
+        return -1;
+      }
+      if(a.name > b.name){
+        return 1;
+      }
+      return 0;
+    });
+}
+
 export const getParty = async (id: number): Promise<Party> => {
   const { response } = (
     await getBackendResponse(`party/${id}`, "GET", null)

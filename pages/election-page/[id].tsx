@@ -4,7 +4,7 @@ import { Election } from '../../classes/Election';
 import { Party } from '../../classes/Party';
 import Layout from '../../components/Layout';
 import { getElection } from '../../services/election';
-import { getParty } from '../../services/party';
+import { getPartiesById, getParty } from '../../services/party';
 import { newVote } from '../../services/vote';
 import Router from 'next/router';
 import { Vote } from '../../classes/Vote';
@@ -131,10 +131,7 @@ export const getServerSideProps: GetServerSideProps<ElectionPageProps> = async (
       };
     }
     const election: Election | undefined = await getElection(Number(params!.id));
-    let parties: Party[] = [];
-    for(const party of election.parties){
-      parties.push(await getParty(party));
-    }
+    let parties: Party[] = await getPartiesById(election.parties);
     const id: string | undefined = req.cookies.userId;
     return {
       props: {
