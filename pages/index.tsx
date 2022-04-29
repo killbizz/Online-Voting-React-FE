@@ -1,5 +1,4 @@
 import Layout from '../components/Layout'
-import Image from 'next/image'
 import Link from 'next/link'
 import { isUserLoggedIn } from '../services/auth';
 
@@ -10,7 +9,7 @@ const IndexPage = () => {
         <div className="container col-xxl-8 px-4 py-5">
           <div className="row flex-lg-row-reverse align-items-center g-5 py-5">
             <div className="col-10 col-sm-8 col-lg-5">
-              <img src="/images/colored-ballots_bw.jpg" className="d-block mx-lg-auto img-fluid" alt="Voting Image" width="1200" height="900" loading="lazy" />
+              <img src="/images/colored-ballots.jpg" className="d-block mx-lg-auto img-fluid" alt="Voting Image" width="1200" height="900" loading="lazy" />
             </div>
             <div className="col-lg-6">
               <h1 className="display-5 fw-bold lh-1 mb-3">Welcome to the Online Voting Web Application</h1>
