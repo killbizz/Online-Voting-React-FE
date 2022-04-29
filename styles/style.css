@@ -86,7 +86,8 @@ img{
 }
 
 .partyLogo {
-  max-width: 100px !important;
+  max-width: 260px !important;
+  min-width: 140px !important;
 }
 
 .container{
@@ -240,4 +241,13 @@ ul li::before {
 
 div.active {
   background-color: #268bf0;
+}
+
+.fa-github {
+  background: #d8d8d8;
+  color: rgb(0, 0, 0);
+}
+
+.github-logo:hover {
+  color: rgb(41, 41, 41);
 }
