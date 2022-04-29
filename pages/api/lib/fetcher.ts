@@ -6,8 +6,6 @@ export default class Fetcher {
   constructor(funName: string) {
     this.url = new URL(
       //`http://localhost:8080/${funName}`
-      // Google App Engine 
-      //`https://voting-online-342816.oa.r.appspot.com/${funName}`
       // Google Compute Engine
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/${funName}`
     );
