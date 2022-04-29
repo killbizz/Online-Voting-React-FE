@@ -3,6 +3,7 @@ import ReactTooltip from 'react-tooltip';
 import Router from 'next/router';
 import { Vote } from "../../classes/Vote";
 import React, { useEffect, useState } from 'react';
+import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 
 interface ElectionListProps {
     elections: Election[],
@@ -33,22 +34,22 @@ const ElectionList = ({ elections, userVotes, userId }: ElectionListProps) => {
     },[]);
 
     return (
-        <table className="table mb-4">
-            <thead className="thead-light">
-            <tr key={"userElectionListHeader"}>
-                <th scope="col">Name</th>
-                <th scope="col">Start Date</th>
-                <th scope="col">End Date</th>
-                <th scope="col">Action</th>
-            </tr>
-            </thead>
-            <tbody>
+        <Table className="table mb-4">
+            <Thead className="thead-light">
+            <Tr key={"userElectionListHeader"}>
+                <Th scope="col">Name</Th>
+                <Th scope="col">Start Date</Th>
+                <Th scope="col">End Date</Th>
+                <Th scope="col">Action</Th>
+            </Tr>
+            </Thead>
+            <Tbody>
                 {elections.map((election) => 
-                    <tr key={election.id}>
-                        <td>{election.name}</td>
-                        <td>{election.startDate}</td>
-                        <td>{election.endDate}</td>
-                        <td>
+                    <Tr key={election.id}>
+                        <Td>{election.name}</Td>
+                        <Td>{election.startDate}</Td>
+                        <Td>{election.endDate}</Td>
+                        <Td>
                             { !votePossibility(election.id, election.startDate, election.endDate) &&
                             <>
                                 {isMounted &&
@@ -62,12 +63,12 @@ const ElectionList = ({ elections, userVotes, userId }: ElectionListProps) => {
                             { votePossibility(election.id, election.startDate, election.endDate) &&
                             <button type="button" className="btn btn-secondary btn-sm px-4 me-md-2" onClick={() => Router.push(`election-page/${election.id}`)}>Vote!</button>
                             }
-                        </td>
-                    </tr>
+                        </Td>
+                    </Tr>
                 )
                 }
-            </tbody>
-        </table>
+            </Tbody>
+        </Table>
     );
 
 }

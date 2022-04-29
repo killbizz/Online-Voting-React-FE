@@ -3,6 +3,7 @@ import ReactTooltip from 'react-tooltip';
 import { Election } from "../../classes/Election";
 import { deleteParty } from "../../services/party";
 import React, { useEffect, useState } from 'react';
+import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 
 interface PartyListProps {
     parties: Party[],
@@ -41,24 +42,24 @@ const PartyList = ({ parties, elections, refreshOnPartiesChange }: PartyListProp
     },[]);
 
     return(
-        <table className="table mb-4">
-            <thead className="thead-light">
-            <tr key={"partyListHeader"}>
-                <th scope="col">ID</th>
-                <th scope="col">Logo</th>
-                <th scope="col">Name</th>
-                <th scope="col">Candidate</th>
-                <th scope="col">Action</th>
-            </tr>
-            </thead>
-            <tbody>
+        <Table className="table mb-4">
+            <Thead className="thead-light">
+            <Tr key={"partyListHeader"}>
+                <Th scope="col">ID</Th>
+                <Th scope="col">Name</Th>
+                <Th scope="col">Candidate</Th>
+                <Th scope="col">Logo</Th>
+                <Th scope="col">Action</Th>
+            </Tr>
+            </Thead>
+            <Tbody>
                 { parties.map((party) => 
-                    <tr key={party.id}>
-                        <th scope="row">{party.id}</th>
-                        <td className="partyLogo"><img className="rounded" src={party.base64logo} alt={party.name} height="100" width="60" /></td>
-                        <td>{party.name.charAt(0).toUpperCase() + party.name.slice(1)}</td>
-                        <td>{party.candidate.charAt(0).toUpperCase() + party.candidate.slice(1)}</td>
-                        <td>
+                    <Tr key={party.id}>
+                        <Th scope="row">{party.id}</Th>
+                        <Td>{party.name.charAt(0).toUpperCase() + party.name.slice(1)}</Td>
+                        <Td>{party.candidate.charAt(0).toUpperCase() + party.candidate.slice(1)}</Td>
+                        <Td><img className="rounded partyLogo" src={party.base64logo} alt={party.name} height="100" width="60" /></Td>
+                        <Td>
                             { !deletePossibility(party.id) &&
                             <>
                                 {isMounted &&
@@ -72,13 +73,13 @@ const PartyList = ({ parties, elections, refreshOnPartiesChange }: PartyListProp
                             { deletePossibility(party.id) &&
                             <button type="button" className="btn btn-danger btn-sm px-4 me-md-2" onClick={() => deleteSelectedParty(party.id)}>Delete</button>
                             }
-                        </td>
-                    </tr>
+                        </Td>
+                    </Tr>
                 )
                 }
                 
-            </tbody>
-        </table>
+            </Tbody>
+        </Table>
     );
 }
 

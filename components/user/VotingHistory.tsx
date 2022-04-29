@@ -1,6 +1,7 @@
 import { Election } from "../../classes/Election";
 import { Party } from "../../classes/Party";
 import { Vote } from "../../classes/Vote";
+import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 
 interface VotingHistoryProps {
     userRelatedElections: Election[],
@@ -19,30 +20,30 @@ const VotingHistory = ({ userRelatedElections, userRelatedParties, userVotes }: 
     }
 
     return (
-        <table className="table mb-4">
-            <thead className="thead-light">
-            <tr key={"votingHistoryListHeader"}>
-                <th scope="col">Election Name</th>
-                <th scope="col">Election Start Date</th>
-                <th scope="col">Election End Date</th>
-                <th scope="col">Vote Date</th>
-                <th scope="col">Voted Party and Candidate</th>
-            </tr>
-            </thead>
-            <tbody>
+        <Table className="table mb-4">
+            <Thead className="thead-light">
+            <Tr key={"votingHistoryListHeader"}>
+                <Th scope="col">Election Name</Th>
+                <Th scope="col">Election Start Date</Th>
+                <Th scope="col">Election End Date</Th>
+                <Th scope="col">Vote Date</Th>
+                <Th scope="col">Party and Candidate</Th>
+            </Tr>
+            </Thead>
+            <Tbody>
                 {
                     userVotes.map((vote) => 
-                        <tr key={vote.id}>
-                            <td>{getCorrispondingElection(vote.electionId)!.name}</td>
-                            <td>{getCorrispondingElection(vote.electionId)!.startDate}</td>
-                            <td>{getCorrispondingElection(vote.electionId)!.endDate}</td>
-                            <td>{vote.date}</td>
-                            <td>{getCorrispondingParty(vote.partyId)!.name} - {getCorrispondingParty(vote.partyId)!.candidate}</td>
-                        </tr>
+                        <Tr key={vote.id}>
+                            <Td>{getCorrispondingElection(vote.electionId)!.name}</Td>
+                            <Td>{getCorrispondingElection(vote.electionId)!.startDate}</Td>
+                            <Td>{getCorrispondingElection(vote.electionId)!.endDate}</Td>
+                            <Td>{vote.date}</Td>
+                            <Td>{getCorrispondingParty(vote.partyId)!.name} - {getCorrispondingParty(vote.partyId)!.candidate}</Td>
+                        </Tr>
                     )
                 }
-            </tbody>
-        </table>
+            </Tbody>
+        </Table>
     );
 }
 
