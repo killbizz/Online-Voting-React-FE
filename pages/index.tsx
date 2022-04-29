@@ -1,13 +1,14 @@
 import Layout from '../components/Layout'
 import Link from 'next/link'
 import { isUserLoggedIn } from '../services/auth';
+import HomeCanvas from '../paper-js/HomeCanvas';
 
 const IndexPage = () => {
   return (
     <Layout title="e-Voting Homepage">
       <div className="mid">
-        <div className="container col-xxl-8 px-4 py-5">
-          <div className="row flex-lg-row-reverse align-items-center g-5 py-5">
+        <div className="container col-xxl-8 px-4 pb-5">
+          <div className="row flex-lg-row-reverse align-items-center g-5 pt-5">
             <div className="col-10 col-sm-8 col-lg-5">
               <img src="/images/colored-ballots.jpg" className="d-block mx-lg-auto img-fluid" alt="Voting Image" width="1200" height="900" loading="lazy" />
             </div>
@@ -29,6 +30,9 @@ const IndexPage = () => {
             </div>
           </div>
         </div>
+        <div className="row" id="homeCanvasRow">
+            <HomeCanvas />
+          </div>
       </div>
     </Layout>
   );
