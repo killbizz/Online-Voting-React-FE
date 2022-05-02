@@ -20,8 +20,7 @@ const draw1 = () => {
     let path = new Paper.Path();
     let mousePos = Paper.view.center / 2;
     let pathHeight = isNaN(mousePos) ? Paper.view.center / 2 : mousePos.y;
-    // probabilmente problemi con il SSR
-    // console.log("pathHeight: " + pathHeight);
+    // console.log("pathHeight iniziale: " + pathHeight);
 
     path.fillColor = 'black';
     initializePath();
@@ -43,7 +42,7 @@ const draw1 = () => {
     Paper.view.onFrame = (event) => {
         pathHeight += (center.y - ( isNaN(mousePos) ? Paper.view.center / 2 : mousePos.y ) - pathHeight) / 10;
 
-        // console.log("pathHeight: " + pathHeight);
+        console.log("pathHeight: " + pathHeight);
         // console.log("mousePos: " + mousePos);
         // console.log("centerY: " + center.y);
 
@@ -58,7 +57,7 @@ const draw1 = () => {
     }
 
     Paper.view.onMouseMove = (event) => {
-        // console.log(event);
+        console.log(event);
         mousePos = event.point;
     }
 
