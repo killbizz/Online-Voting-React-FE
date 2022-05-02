@@ -20,7 +20,8 @@ const draw1 = () => {
     let path = new Paper.Path();
     let mousePos = Paper.view.center / 2;
     let pathHeight = isNaN(mousePos) ? Paper.view.center / 2 : mousePos.y;
-    // console.log("pathHeight iniziale: " + pathHeight);
+    console.log("Paper.view.center iniziale: " + Paper.view.center);
+    console.log("pathHeight iniziale: " + pathHeight);
 
     path.fillColor = 'black';
     initializePath();
