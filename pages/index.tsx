@@ -20,7 +20,7 @@ const IndexPage = () => {
               <div className="d-grid gap-2 d-md-flex justify-content-md-start">
                 {!isUserLoggedIn() &&
                 <Link href="/sign-up">
-                  <a><button type="button" className="btn btn-danger btn-lg px-4 me-md-2">Sign Up to Vote!</button></a>
+                  <a><button type="button" className="btn btn-outline-danger btn-lg px-4 me-md-2">Sign Up to Vote!</button></a>
                 </Link>
                 }
                 {!isUserLoggedIn() &&
