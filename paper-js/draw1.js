@@ -19,7 +19,7 @@ const draw1 = () => {
     let smooth = true;
     let path = new Paper.Path();
     let mousePos = Paper.view.center / 2;
-    let pathHeight = isNaN(mousePos) ? Paper.view.center / 2 : mousePos.y;
+    let pathHeight = isNaN(mousePos) ? Paper.view.center.y : mousePos.y;
     console.log("Paper.view.center iniziale: " + Paper.view.center);
     console.log("pathHeight iniziale: " + pathHeight);
 
