@@ -41,7 +41,7 @@ const draw1 = () => {
     }
 
     Paper.view.onFrame = (event) => {
-        pathHeight += (center.y - ( isNaN(mousePos) ? Paper.view.center.y : mousePos.y ) - pathHeight) / 10;
+        pathHeight += (center.y - ( isNaN(mousePos) ? Paper.view.center.y : mousePos.y )) / 10;
 
         console.log("pathHeight: " + pathHeight);
         // console.log("mousePos: " + mousePos);
