@@ -37,13 +37,13 @@ const draw1 = () => {
             path.add(point);
         }
         path.add(Paper.view.bounds.bottomRight);
-        path.fullySelected = true;
+        // path.fullySelected = true;
     }
 
     Paper.view.onFrame = (event) => {
         pathHeight += (center.y - ( isNaN(mousePos) ? Paper.view.center.y : mousePos.y )) / 10;
 
-        console.log("pathHeight: " + pathHeight);
+        // console.log("pathHeight: " + pathHeight);
         // console.log("mousePos: " + mousePos);
         // console.log("centerY: " + center.y);
 
@@ -58,21 +58,21 @@ const draw1 = () => {
     }
 
     Paper.view.onMouseMove = (event) => {
-        console.log(event);
+        // console.log(event);
         mousePos = event.point;
     }
 
-    // Paper.view.onMouseDown = (event) => {
-    //     smooth = !smooth;
-    //     if (!smooth) {
-    //         // If smooth has been turned off, we need to reset
-    //         // the handles of the path:
-    //         for (var i = 0, l = path.segments.length; i < l; i++) {
-    //             var segment = path.segments[i];
-    //             segment.handleIn = segment.handleOut = null;
-    //         }
-    //     }
-    // }
+    Paper.view.onMouseDown = (event) => {
+        smooth = !smooth;
+        if (!smooth) {
+            // If smooth has been turned off, we need to reset
+            // the handles of the path:
+            for (var i = 0, l = path.segments.length; i < l; i++) {
+                var segment = path.segments[i];
+                segment.handleIn = segment.handleOut = null;
+            }
+        }
+    }
 
     // Reposition the path whenever the window is resized:
     Paper.view.onResize = (event) => {
