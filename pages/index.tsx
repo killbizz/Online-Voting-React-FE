@@ -1,7 +1,8 @@
+import dynamic from 'next/dynamic';
 import Layout from '../components/Layout'
 import Link from 'next/link'
 import { isUserLoggedIn } from '../services/auth';
-import HomeCanvas from '../paper-js/HomeCanvas';
+const HomeCanvas = dynamic(() => import('../paper-js/HomeCanvas'), { ssr: false });
 
 const IndexPage = () => {
   return (

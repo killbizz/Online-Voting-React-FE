@@ -14,27 +14,26 @@ const draw1 = () => {
 
 //   Paper.view.draw();
 
-    var width, height, center;
-    var points = 10;
-    var smooth = true;
-    var path = new Paper.Path();
-    var mousePos = Paper.view.center / 2;
-    var pathHeight = mousePos.y;
+    let width, height, center;
+    let points = 5;
+    let smooth = true;
+    let path = new Paper.Path();
+    let mousePos = Paper.view.center / 2;
+    let pathHeight = isNaN(mousePos) ? Paper.view.center / 2 : mousePos.y;
+    // probabilmente problemi con il SSR
+    // console.log("pathHeight: " + pathHeight);
+
     path.fillColor = 'black';
     initializePath();
 
     function initializePath() {
-        console.log(Paper.view.center);
-        console.log(Paper.view.size.width);
-        console.log(Paper.view.size.height);
-
         center = Paper.view.center;
         width = Paper.view.size.width;
         height = Paper.view.size.height / 2;
         path.segments = [];
         path.add(Paper.view.bounds.bottomLeft);
-        for (var i = 1; i < points; i++) {
-            var point = new Paper.Point(width / points * i, center.y);
+        for (let i = 1; i < points; i++) {
+            let point = new Paper.Point(width / points * i,  center.y);
             path.add(point);
         }
         path.add(Paper.view.bounds.bottomRight);
@@ -42,11 +41,16 @@ const draw1 = () => {
     }
 
     Paper.view.onFrame = (event) => {
-        pathHeight += (center.y - mousePos.y - pathHeight) / 10;
-        for (var i = 1; i < points; i++) {
-            var sinSeed = event.count + (i + i % 10) * 100;
-            var sinHeight = Math.sin(sinSeed / 200) * pathHeight;
-            var yPos = Math.sin(sinSeed / 100) * sinHeight + height;
+        pathHeight += (center.y - ( isNaN(mousePos) ? Paper.view.center / 2 : mousePos.y ) - pathHeight) / 10;
+
+        // console.log("pathHeight: " + pathHeight);
+        // console.log("mousePos: " + mousePos);
+        // console.log("centerY: " + center.y);
+
+        for (let i = 1; i < points; i++) {
+            let sinSeed = event.count + (i + i % 10) * 100;
+            let sinHeight = Math.sin(sinSeed / 200) * pathHeight;
+            let yPos = Math.sin(sinSeed / 100) * sinHeight + height;
             path.segments[i].point.y = yPos;
         }
         if (smooth)
@@ -54,6 +58,7 @@ const draw1 = () => {
     }
 
     Paper.view.onMouseMove = (event) => {
+        // console.log(event);
         mousePos = event.point;
     }
 
