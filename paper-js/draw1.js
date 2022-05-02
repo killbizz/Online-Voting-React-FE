@@ -1,29 +1,13 @@
 import Paper from "paper";
 
 const draw1 = () => {
-//   let myPath = new Paper.Path();
-
-//   Paper.view.onMouseDown = (event) => {
-//     myPath.strokeColor = "black";
-//     myPath.strokeWidth = 5;
-//   };
-
-//   Paper.view.onMouseDrag = (event) => {
-//     myPath.add(event.point);
-//   };
-
-//   Paper.view.draw();
-
     let width, height, center;
     let points = 5;
     let smooth = true;
     let path = new Paper.Path();
     let mousePos = Paper.view.center / 2;
     let pathHeight = isNaN(mousePos) ? Paper.view.center.y : mousePos.y;
-    console.log("Paper.view.center iniziale: " + Paper.view.center);
-    console.log("pathHeight iniziale: " + pathHeight);
-
-    path.fillColor = 'black';
+    path.fillColor = 'red';
     initializePath();
 
     function initializePath() {
@@ -42,17 +26,16 @@ const draw1 = () => {
 
     Paper.view.onFrame = (event) => {
         pathHeight += (center.y - ( isNaN(mousePos) ? Paper.view.center.y : mousePos.y )) / 10;
-
         // console.log("pathHeight: " + pathHeight);
         // console.log("mousePos: " + mousePos);
         // console.log("centerY: " + center.y);
-
         for (let i = 1; i < points; i++) {
             let sinSeed = event.count + (i + i % 10) * 100;
             let sinHeight = Math.sin(sinSeed / 200) * pathHeight;
             let yPos = Math.sin(sinSeed / 100) * sinHeight + height;
             path.segments[i].point.y = yPos;
         }
+        path.fillColor.hue += 0.5;
         if (smooth)
             path.smooth({ type: 'continuous' });
     }
