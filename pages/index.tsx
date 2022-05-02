@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 import Layout from '../components/Layout'
 import Link from 'next/link'
-import { isUserLoggedIn } from '../services/auth';
+import { isUserAdmin, isUserLoggedIn } from '../services/auth';
 const HomeCanvas = dynamic(() => import('../paper-js/HomeCanvas'), { ssr: false });
 
 const IndexPage = () => {
@@ -25,6 +25,16 @@ const IndexPage = () => {
                 {!isUserLoggedIn() &&
                 <Link href="/login">
                   <a type="button" className="btn btn-outline-secondary btn-lg px-4">Login with your credentials</a>
+                </Link>
+                }
+                {isUserLoggedIn() && isUserAdmin() &&
+                <Link href="/admin-dashboard">
+                  <a type="button" className="btn btn-outline-secondary btn-lg px-4">Manage the elections</a>
+                </Link>
+                }
+                {isUserLoggedIn() && !isUserAdmin() &&
+                <Link href="/user-dashboard">
+                  <a type="button" className="btn btn-outline-secondary btn-lg px-4">Go and vote!</a>
                 </Link>
                 }
               </div>
