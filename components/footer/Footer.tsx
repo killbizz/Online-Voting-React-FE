@@ -4,7 +4,7 @@ const Footer = () => {
             <div className="container text-center">
                 <div className="row justify-content-center">
                     <div className="col-6">
-                        <span className="text-muted copyright" >&copy; 2021-2022 Gabriel Bizzo</span>
+                        <span className="text-muted copyright" >&copy; 2021 Gabriel Bizzo</span>
                     </div>
                     <div className="col-6">
                         <a href="https://github.com/killbizz/Online-Voting-React-FE">

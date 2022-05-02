@@ -12,7 +12,7 @@ const HomeCanvas = props => {
     draw1();
   }, []);
   
-  return <canvas ref={canvasRef} {...props} id="homeCanvas" height={60} />
+  return <canvas ref={canvasRef} {...props} id="homeCanvas" height={42.8} />
 }
 
 export default HomeCanvas;

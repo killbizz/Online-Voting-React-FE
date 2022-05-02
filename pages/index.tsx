@@ -1,13 +1,15 @@
+import dynamic from 'next/dynamic';
 import Layout from '../components/Layout'
-import Link from 'next/link'
-import { isUserLoggedIn } from '../services/auth';
-import HomeCanvas from '../paper-js/HomeCanvas';
+//import Link from 'next/link'
+import { isUserAdmin, isUserLoggedIn } from '../services/auth';
+const HomeCanvas = dynamic(() => import('../paper-js/HomeCanvas'), { ssr: false });
+const Link = dynamic(() => import('next/link'), { ssr: false });
 
 const IndexPage = () => {
   return (
     <Layout title="e-Voting Homepage">
       <div className="mid">
-        <div className="container col-xxl-8 px-4 pb-5">
+        <div className="container col-xxl-8 px-4 py-5">
           <div className="row flex-lg-row-reverse align-items-center g-5 pt-5">
             <div className="col-10 col-sm-8 col-lg-5">
               <img src="/images/colored-ballots.jpg" className="d-block mx-lg-auto img-fluid" alt="Voting Image" width="1200" height="900" loading="lazy" />
@@ -24,6 +26,16 @@ const IndexPage = () => {
                 {!isUserLoggedIn() &&
                 <Link href="/login">
                   <a type="button" className="btn btn-outline-secondary btn-lg px-4">Login with your credentials</a>
+                </Link>
+                }
+                {isUserLoggedIn() && isUserAdmin() &&
+                <Link href="/admin-dashboard">
+                  <a type="button" className="btn btn-outline-secondary btn-lg px-4">Manage the elections</a>
+                </Link>
+                }
+                {isUserLoggedIn() && !isUserAdmin() &&
+                <Link href="/user-dashboard">
+                  <a type="button" className="btn btn-outline-secondary btn-lg px-4">Go and vote!</a>
                 </Link>
                 }
               </div>
