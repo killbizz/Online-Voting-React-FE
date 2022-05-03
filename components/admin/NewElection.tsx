@@ -195,7 +195,7 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
                   <Col sm="9">
                       {
                         parties.map((party: Party) => 
-                          <div key={party.id} className="row border border-secondary rounded my-1">
+                          <div key={party.id} className="row align-items-center border border-secondary rounded my-1">
                             <input className="col-auto mx-2 checkbox" type="checkbox" id={party.id.toString()} value={party.id} onClick={() => handlePartyClick(party.id)} />
                             <label className="col mx-1" htmlFor={party.name.toString()}>{party.name} - {party.candidate}</label>
                           </div>)
