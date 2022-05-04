@@ -145,7 +145,7 @@ export const getServerSideProps: GetServerSideProps<ElectionPageProps> = async (
     return {
       props: {
         parties: parties,
-        election: election === undefined ? new Election() : election,
+        election: election,
         userId: id === undefined ? null : id
       }
     };
