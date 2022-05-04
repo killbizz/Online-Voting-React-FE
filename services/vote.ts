@@ -2,9 +2,7 @@ import { Vote } from '../classes/Vote';
 import getBackendResponse from '../pages/api/lib/endpoints';
 
 export const getVotes = async (): Promise<Vote[]> => {
-  const { response } = (
-    await getBackendResponse("vote", "GET", null)
-  ).props;
+  const { response } = await getBackendResponse("vote", "GET", null);
   if (response._embedded === undefined) {
     return [];
   }
@@ -20,9 +18,7 @@ export const getVotes = async (): Promise<Vote[]> => {
 }
 
 export const getVotesByUserId = async (id: string): Promise<Vote[]> => {
-  const { response } = (
-    await getBackendResponse("vote", "GET", null)
-  ).props;
+  const { response } = await getBackendResponse("vote", "GET", null);
   if (response._embedded === undefined) {
     return [];
   }
@@ -38,7 +34,7 @@ export const getVotesByUserId = async (id: string): Promise<Vote[]> => {
 }
 
 export const newVote = async (vote: Vote): Promise<boolean> => {
-  const { response } = ( await getBackendResponse("vote", "POST", JSON.stringify(vote))).props;
+  const { response } = await getBackendResponse("vote", "POST", JSON.stringify(vote));
   if(response.error !== undefined){
     return false;
   }

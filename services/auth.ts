@@ -20,9 +20,7 @@ export const signIn = async (email: string, password: string): Promise<boolean> 
 
   startLoadingBar();
 
-  const { response } = (
-    await getBackendResponse("login", "POST", JSON.stringify(credentials))
-  ).props;
+  const { response } = await getBackendResponse("login", "POST", JSON.stringify(credentials));
 
   if (response.userId === undefined) {
     return false;
@@ -63,9 +61,7 @@ export const signUp = async (user: User) : Promise<boolean> => {
 
   startLoadingBar();
 
-  const { response } = (
-    await getBackendResponse("user", "POST", JSON.stringify(user))
-  ).props;
+  const { response } = await getBackendResponse("user", "POST", JSON.stringify(user));
 
   if (response.code !== undefined) {
     return false;

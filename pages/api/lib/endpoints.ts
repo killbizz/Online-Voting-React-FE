@@ -7,8 +7,6 @@ export default async function getBackendResponse(
 ) {
   const fetcher = new Fetcher(funName);
   return {
-    props: {
       response: await fetcher.getJSONResponse(method, params),
-    },
   };
 }
