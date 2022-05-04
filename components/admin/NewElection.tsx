@@ -83,7 +83,7 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
       const election: Election = new Election(0, name, type, moment(dpStartDate).format('YYYY-MM-DD'), moment(dpEndDate).format('YYYY-MM-DD'), Object.assign([], partiesInNewElection) , undefined);
       const result: boolean = await newElection(election);
       refreshOnElectionsChange();
-      setProductInserted(result);
+      setElectionCreated(result);
 
       // reset form
       event.target.name.value = "";
@@ -91,9 +91,10 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
       setDpStartDate(new Date());
       setDpEndDate(new Date());
       unCheck();
-      partiesInNewElection.splice(0,partiesInNewElection.length)
+      partiesInNewElection = [];
+    } else {
+      setElectionCreated(false);
     }
-    setProductInserted(false);
   }
   
   let partiesInNewElection: number[] = [];
@@ -101,7 +102,7 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
   const [dpEndDate, setDpEndDate] = useState(new Date());
   const [errors, setErrors] = useState(new Map<string,string>());
   const [show, setShow] = useState(true);
-  const [productInserted, setProductInserted] = useState(false);
+  const [electionCreated, setElectionCreated] = useState(false);
 
   return (
     <div className="NewFormBoxing mx-auto">
@@ -210,7 +211,7 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
                   </Col>
                 </Form.Row>
               </Form>
-              {productInserted &&
+              {electionCreated &&
                 <Alert variant="success" show={show} onClose={() => setShow(false)} dismissible>
                   <Alert.Heading className="text-center">
                     Election created successfully!
