@@ -36,6 +36,13 @@ const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
             const result: boolean = await newParty(party);
             refreshOnPartiesChange();
             setPartyCreated(result);
+
+            // reset form
+            event.target.name.value = "";
+            event.target.candidate.value = "";
+            event.target.logo.value = null;
+        } else {
+            setPartyCreated(false);
         }
     }
 
