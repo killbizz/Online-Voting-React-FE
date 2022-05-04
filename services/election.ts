@@ -18,10 +18,10 @@ export const getElections = async (): Promise<Election[]> => {
   });
 }
 
-export const getElection = async (id: number): Promise<Election> => {
+export const getElection = async (id: number): Promise<Election | undefined> => {
   const { response } = await getBackendResponse(`election/${id}`, "GET", null);
   if (response.error !== undefined) {
-    //return undefined;
+    return undefined;
   }
   return response;
 }
