@@ -1,31 +1,18 @@
 import Link from "next/link";
 import Layout from "../components/Layout"
-import { NextPageContext } from 'next';
 
-interface CustomErrorProps {
-  statusCode: number;
-  description: string
-}
-
-const CustomError = ({ statusCode, description }: CustomErrorProps) => {
+const CustomError = () => {
   return (
     <>
       <Layout title="Error">
-        <h1 className="text-center">Oooops</h1>
-        <h2>
-            {statusCode
-            ? 'The following Server-side error occurred:'
-            : 'The following Client-side error occurred:'
-            }
+        <h1 className="text-center mb-2">Oooops</h1>
+        <h2 className="text-center mb-2">
+          A Server-side Error occurred:
         </h2>
-        <ul className="text-center">
-            <li>Status Code: ${statusCode}</li>
-            <li>Description: ${description}</li>
-        </ul>
-        <h2 className="text-center">Please remember that this is a PROTOTYPE website and:</h2>
-        <ul className="text-center">
+        <h2 className="text-center mb-2">Please remember that this is a PROTOTYPE website and:</h2>
+        <ul className="text-center mb-2">
             <li>The website security was not the focus of the project</li>
-            <li>there may be server-side errors or performance problems due to the database</li>
+            <li>There may be server-side errors or performance problems due to the database</li>
         </ul>
         <h4>
           Go back to the
@@ -35,19 +22,5 @@ const CustomError = ({ statusCode, description }: CustomErrorProps) => {
     </>
   );
 };
-
-CustomError.getInitialProps = async (ctx: NextPageContext) => {
-    const {res, err} = ctx;
-    const cause = err?.cause ? err.cause : "";
-    const message = err?.message ? err.message : "";
-    const stack = err?.stack ? err.stack : "";
-    const ds = message + " - " + cause + " - " + stack;
-    const statusCode = res ? res.statusCode : err ? err.statusCode : 404
-
-    return {
-        statusCode,
-        ds
-    };
-  }
 
 export default CustomError;
