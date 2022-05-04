@@ -131,12 +131,21 @@ export const getServerSideProps: GetServerSideProps<ElectionPageProps> = async (
       };
     }
     const election: Election | undefined = await getElection(Number(params!.id));
-    let parties: Party[] = await getPartiesById(election.parties);
+    // election doesn't exist
+    // if(election === undefined){
+    //   return {
+    //     redirect: {
+    //       destination: "/user-dashboard",
+    //       permanent: false,
+    //     },
+    //   };
+    // }
+    let parties: Party[] = await getPartiesById(election!.parties);
     const id: string | undefined = req.cookies.userId;
     return {
       props: {
         parties: parties,
-        election: election,
+        election: election === undefined ? new Election() : election,
         userId: id === undefined ? null : id
       }
     };

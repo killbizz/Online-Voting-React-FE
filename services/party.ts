@@ -2,9 +2,7 @@ import { Party } from '../classes/Party';
 import getBackendResponse from '../pages/api/lib/endpoints';
 
 export const getParties = async (): Promise<Party[]> => {
-  const { response } = (
-    await getBackendResponse("party", "GET", null)
-  ).props;
+  const { response } = await getBackendResponse("party", "GET", null);
   if (response._embedded === undefined) {
     return [];
   }
@@ -21,9 +19,7 @@ export const getParties = async (): Promise<Party[]> => {
 
 export const getPartiesById = async (partiesId: number[]): Promise<Party[]> => {
 
-  const { response } = (
-    await getBackendResponse("party", "GET", null)
-  ).props;
+  const { response } = await getBackendResponse("party", "GET", null);
   if (partiesId.length === 0 || response._embedded === undefined) {
     return [];
   }
@@ -40,9 +36,7 @@ export const getPartiesById = async (partiesId: number[]): Promise<Party[]> => {
 }
 
 export const getParty = async (id: number): Promise<Party> => {
-  const { response } = (
-    await getBackendResponse(`party/${id}`, "GET", null)
-  ).props;
+  const { response } = await getBackendResponse(`party/${id}`, "GET", null);
   if (response === undefined) {
     console.log(response);
   }
@@ -50,7 +44,7 @@ export const getParty = async (id: number): Promise<Party> => {
 }
 
 export const newParty = async (party: Party): Promise<boolean> => {
-  const { response } = ( await getBackendResponse("party", "POST", JSON.stringify(party))).props;
+  const { response } = await getBackendResponse("party", "POST", JSON.stringify(party));
   if(response.error !== undefined){
     return false;
   }
@@ -58,7 +52,7 @@ export const newParty = async (party: Party): Promise<boolean> => {
 }
 
 export const deleteParty = async (id: number): Promise<boolean> => {
-  const { response } = ( await getBackendResponse(`party/${id}`, "DELETE", null)).props;
+  const { response } = await getBackendResponse(`party/${id}`, "DELETE", null);
   if(response.error !== undefined){
     return false;
   }

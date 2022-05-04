@@ -1,10 +1,9 @@
 import { Election } from '../classes/Election';
+import { ErrorResponse } from '../classes/ErrorResponse';
 import getBackendResponse from '../pages/api/lib/endpoints';
 
 export const getElections = async (): Promise<Election[]> => {
-  const { response } = (
-    await getBackendResponse("election", "GET", null)
-  ).props;
+  const { response } = await getBackendResponse("election", "GET", null);
   if (response._embedded === undefined) {
     return [];
   }
@@ -19,18 +18,16 @@ export const getElections = async (): Promise<Election[]> => {
   });
 }
 
-export const getElection = async (id: number): Promise<Election> => {
-  const { response } = (
-    await getBackendResponse(`election/${id}`, "GET", null)
-  ).props;
-  if (response === undefined) {
-    console.log(response);
+export const getElection = async (id: number): Promise<Election | undefined> => {
+  const { response } = await getBackendResponse(`election/${id}`, "GET", null);
+  if (response.error !== undefined) {
+    return undefined;
   }
   return response;
 }
 
 export const newElection = async (election: Election): Promise<boolean> => {
-  const { response } = ( await getBackendResponse("election", "POST", JSON.stringify(election))).props;
+  const { response } = await getBackendResponse("election", "POST", JSON.stringify(election));
   if(response.error !== undefined){
     return false;
   }
@@ -38,7 +35,7 @@ export const newElection = async (election: Election): Promise<boolean> => {
 }
 
 export const updateElection = async (id: number, election: Election): Promise<boolean> => {
-  const { response } = ( await getBackendResponse(`election/${id}`, "PUT", JSON.stringify(election))).props;
+  const { response } = await getBackendResponse(`election/${id}`, "PUT", JSON.stringify(election));
   if(response.error !== undefined){
     return false;
   }
@@ -46,7 +43,7 @@ export const updateElection = async (id: number, election: Election): Promise<bo
 }
 
 export const deleteElection = async (id: number): Promise<boolean> => {
-  const { response } = ( await getBackendResponse(`election/${id}`, "DELETE", null)).props;
+  const { response } = await getBackendResponse(`election/${id}`, "DELETE", null);
   if(response.error !== undefined){
     return false;
   }
