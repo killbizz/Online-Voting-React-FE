@@ -23,30 +23,10 @@ export const signIn = async (email: string, password: string): Promise<boolean> 
   const { response } = await getBackendResponse("login", "POST", JSON.stringify(credentials));
 
   if (response.userId === undefined) {
+    stopLoadingBar();
     return false;
   }
-  // API calls to set secure cookies
-  // fetch("/api/auth/login", {
-  //   method: "post",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({ jwtToken: response.jwtToken })
-  // });
-  // fetch("/api/auth/login", {
-  //   method: "post",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({ userRole: response.role })
-  // });
-  // fetch("/api/auth/login", {
-  //   method: "post",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({ userId: response.userId })
-  // });
+  
   // dummy cookie set
   cookie.set("username", response.username);
   cookie.set("userRole", response.role);
@@ -64,6 +44,7 @@ export const signUp = async (user: User) : Promise<boolean> => {
   const { response } = await getBackendResponse("user", "POST", JSON.stringify(user));
 
   if (response.code !== undefined) {
+    stopLoadingBar();
     return false;
   }
 
@@ -73,14 +54,7 @@ export const signUp = async (user: User) : Promise<boolean> => {
 }
 
 export const logout = (): void => {
-  // API calls to delete cookies
-  // fetch("/api/auth/logout", {
-  //   method: "post",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({})
-  // });
+  
   // dummy cookie delete
   cookie.remove("username");
   cookie.remove("userRole");
