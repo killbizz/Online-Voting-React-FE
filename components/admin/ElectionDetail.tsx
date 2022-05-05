@@ -149,7 +149,7 @@ const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: Electio
 
     return (
         <>
-            <button className="btn btn-sm btn-secondary mr-2" onClick={handleShow}>Details</button>
+            <button className="btn btn-sm btn-warning my-1 mr-2" onClick={handleShow}>Edit</button>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                 <Modal.Title>Election Details</Modal.Title>
