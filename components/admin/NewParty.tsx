@@ -48,7 +48,6 @@ const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
 
     const formValidation = (name: string, candidate: string, logo: any): boolean => {
         let isValid: boolean = true;
-
         let sizeFile: any;
         // max 50Kb files
         const maxSize: number = 50000;
@@ -56,6 +55,7 @@ const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
             const [{ size }] = logo.files;
             sizeFile = size;
         }
+        const rejectEmojiRegexp = /[\ud800-\udbff][\udc00-\udfff]|[^\0-\x7f]/;
 
         if (name === "") {
           updateErrors("nameError", "The Name field is required");
@@ -65,6 +65,10 @@ const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
           updateErrors("nameError", "The Name field must contain at least 6 characters");
           isValid = false;
         }
+        else if (name.match(rejectEmojiRegexp)) {
+            updateErrors("nameError", "This field cannot contain emojis");
+            isValid = false;
+        }
         else {
           updateErrors("nameError", "");
         }
@@ -72,9 +76,13 @@ const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
             updateErrors("candidateError", "The Candidate field is required");
             isValid = false;
         }
-        else if (name.length < 6) {
+        else if (candidate.length < 6) {
         updateErrors("candidateError", "The Candidate field must contain at least 6 characters");
         isValid = false;
+        }
+        else if (candidate.match(rejectEmojiRegexp)) {
+            updateErrors("candidateError", "This field cannot contain emojis");
+            isValid = false;
         }
         else {
         updateErrors("candidateError", "");

@@ -1,5 +1,5 @@
 import { Party } from '../classes/Party';
-import getBackendResponse from '../pages/api/lib/endpoints';
+import getBackendResponse from '../lib/endpoints';
 
 export const getParties = async (): Promise<Party[]> => {
   const { response } = await getBackendResponse("party", "GET", null);

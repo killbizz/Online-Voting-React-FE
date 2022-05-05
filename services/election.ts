@@ -1,6 +1,5 @@
 import { Election } from '../classes/Election';
-import { ErrorResponse } from '../classes/ErrorResponse';
-import getBackendResponse from '../pages/api/lib/endpoints';
+import getBackendResponse from '../lib/endpoints';
 
 export const getElections = async (): Promise<Election[]> => {
   const { response } = await getBackendResponse("election", "GET", null);
