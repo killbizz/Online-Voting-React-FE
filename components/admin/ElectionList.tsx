@@ -2,14 +2,17 @@ import { Election } from "../../classes/Election";
 import { Party } from "../../classes/Party";
 import ElectionDetail from "./ElectionDetail";
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
+import { Vote } from "../../classes/Vote";
+import ElectionChart from "./ElectionChart";
 
 interface ElectionListProps {
     elections: Election[],
     parties: Party[],
+    votes: Vote[],
     refreshOnElectionsChange: any
 }
 
-const ElectionList = ({ elections, parties, refreshOnElectionsChange }: ElectionListProps) => {
+const ElectionList = ({ elections, parties, votes, refreshOnElectionsChange }: ElectionListProps) => {
     return (
         <Table className="table mb-4">
             <Thead className="thead-light">
@@ -30,6 +33,7 @@ const ElectionList = ({ elections, parties, refreshOnElectionsChange }: Election
                         <Td>{election.endDate}</Td>
                         <Td>
                             <ElectionDetail election={election} parties={parties} refreshOnElectionsChange={refreshOnElectionsChange} />
+                            <ElectionChart election={election} parties={parties} votes={votes} />
                         </Td>
                     </Tr>
                 )

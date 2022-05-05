@@ -9,13 +9,16 @@ import { Election } from '../../classes/Election';
 import PartyList from '../../components/admin/PartyList';
 import NewParty from '../../components/admin/NewParty';
 import { useState } from 'react';
+import { getVotes } from '../../services/vote';
+import { Vote } from '../../classes/Vote';
 
 interface AdminDashboardProps {
   partiesArray: Party[],
-  electionsArray: Election[]
+  electionsArray: Election[],
+  votesArray: Vote[]
 }
 
-const AdminDashboard = ({ partiesArray, electionsArray } : AdminDashboardProps) => {
+const AdminDashboard = ({ partiesArray, electionsArray, votesArray } : AdminDashboardProps) => {
 
   const refreshOnElectionsChange = async () => {
     const freshElections = await getElections();
@@ -38,7 +41,7 @@ const AdminDashboard = ({ partiesArray, electionsArray } : AdminDashboardProps) 
                     <h1 className="text-center mb-4">Admin Dashboard</h1>
                     <h3 className="text-center my-4">Elections</h3>
                     <NewElection parties={parties} refreshOnElectionsChange={refreshOnElectionsChange} />
-                    <ElectionList elections={elections} parties={parties} refreshOnElectionsChange={refreshOnElectionsChange} />
+                    <ElectionList elections={elections} parties={parties} votes={votesArray} refreshOnElectionsChange={refreshOnElectionsChange} />
                     <h3 className="text-center my-4">Political Parties</h3>
                     <NewParty refreshOnPartiesChange={refreshOnPartiesChange} />
                     <PartyList parties={parties} elections={elections} refreshOnPartiesChange={refreshOnPartiesChange} />
@@ -62,7 +65,8 @@ export const getServerSideProps: GetServerSideProps<AdminDashboardProps> = async
   return {
     props: {
       partiesArray: await getParties(),
-      electionsArray: await getElections()
+      electionsArray: await getElections(),
+      votesArray: await getVotes()
     }
   };
 };
