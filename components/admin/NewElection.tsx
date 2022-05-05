@@ -16,6 +16,8 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
 
   const formValidation = (name: string, startDate: Date, endDate: Date): boolean => {
     let isValid: boolean = true;
+    const rejectEmojiRegexp = /[\ud800-\udbff][\udc00-\udfff]|[^\0-\x7f]/;
+
     if (name === "") {
       updateErrors("nameError", "The Name field is required");
       isValid = false;
@@ -24,6 +26,10 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
       updateErrors("nameError", "The Name field must contain at least 6 characters");
       isValid = false;
     }
+    else if (name.match(rejectEmojiRegexp)) {
+      updateErrors("nameError", "This field cannot contain emojis");
+      isValid = false;
+  }
     else {
       updateErrors("nameError", "");
     }
@@ -41,7 +47,7 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
       isValid = false;
     }
     else if (new Date(endDate) < new Date(startDate)) {
-      updateErrors("endDateError", "The End Date cannot precede the Start Date");
+      updateErrors("endDateError", "The End Date cannot precede the start Date");
       isValid = false;
     }
     else {

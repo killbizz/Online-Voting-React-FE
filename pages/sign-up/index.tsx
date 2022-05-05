@@ -42,12 +42,17 @@ const SignUp = () => {
     const formValidation = (email: string, username: string, password: string): boolean => {
         let isValid: boolean = true;
         const emailRegexp = new RegExp(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/);
+        const rejectEmojiRegexp = /[\ud800-\udbff][\udc00-\udfff]|[^\0-\x7f]/;
         if (email === "") {
         updateErrors("emailError", "The email field is required");
         isValid = false;
         }
         else if (!emailRegexp.test(email)) {
             updateErrors("emailError", "This field must contain a valid email");
+            isValid = false;
+        }
+        else if(email.match(rejectEmojiRegexp)) {
+            updateErrors("emailError", "This field cannot contain emojis");
             isValid = false;
         }
         else {
@@ -61,6 +66,10 @@ const SignUp = () => {
             updateErrors("usernameError", "The Username must be at least 6 characters");
             isValid = false;
         }
+        else if(username.match(rejectEmojiRegexp)) {
+            updateErrors("usernameError", "This field cannot contain emojis");
+            isValid = false;
+        }
         else {
             updateErrors("usernameError", "");
         }
@@ -72,6 +81,10 @@ const SignUp = () => {
         updateErrors("passwordError", "The password must be at least 6 characters");
         isValid = false;
         }
+        else if(password.match(rejectEmojiRegexp)) {
+            updateErrors("passwordError", "This field cannot contain emojis");
+            isValid = false;
+        }
         else {
             updateErrors("passwordError", "");
         }
@@ -81,7 +94,7 @@ const SignUp = () => {
     const [showAlert, setShowAlert] = useState(false);
 
     return (
-        <Layout title="Login page">
+        <Layout title="SignUp page">
             <div className="container">
                 <div className="sign-up">
                         <h1 className="my-3">Sign Up</h1>
