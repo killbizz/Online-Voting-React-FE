@@ -1,6 +1,6 @@
-import { startLoadingBar, stopLoadingBar } from './../pages/api/lib/loading';
+import { startLoadingBar, stopLoadingBar } from '../lib/loading';
 import { User } from '../classes/User';
-import getBackendResponse from '../pages/api/lib/endpoints';
+import getBackendResponse from '../lib/endpoints';
 import cookie from 'js-cookie';
 
 export const isUserLoggedIn = () : boolean | undefined => {

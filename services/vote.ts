@@ -1,5 +1,5 @@
 import { Vote } from '../classes/Vote';
-import getBackendResponse from '../pages/api/lib/endpoints';
+import getBackendResponse from '../lib/endpoints';
 
 export const getVotes = async (): Promise<Vote[]> => {
   const { response } = await getBackendResponse("vote", "GET", null);
