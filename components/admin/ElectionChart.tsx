@@ -32,12 +32,26 @@ const ElectionChart = ({ election, parties, votes }: ElectionChartProps) => {
         return "rgb(" + r + "," + g + "," + b + ")";
     };
 
+    const longestWord = function(string: string) {
+        let str = string.split(" ");
+        let longest: number = 0;
+        let word: string = "";
+        for (let i = 0; i < str.length; i++) {
+            if (longest < str[i].length) {
+                longest = str[i].length;
+                word = str[i];
+            }
+        }
+        return word;
+    }
+
     interface DataType {
         partyName: string,
         "Vote Counter": string
     }
 
     let data: DataType[] = [];
+    let largestLabelWidth: number = 0;
 
     // generate data
     election.parties.forEach(
@@ -59,8 +73,15 @@ const ElectionChart = ({ election, parties, votes }: ElectionChartProps) => {
                     "Vote Counter" : counter.toString()
                 }
             );
+
+            let longestWordInPartyName: string = longestWord(name);
+            console.log(longestWordInPartyName);
+            largestLabelWidth = largestLabelWidth > longestWordInPartyName.length ? largestLabelWidth : longestWordInPartyName.length;
         }
+        
     );
+
+    console.log(largestLabelWidth);
 
     return (
         <>
@@ -97,7 +118,7 @@ const ElectionChart = ({ election, parties, votes }: ElectionChartProps) => {
                                 type="category"
                                 axisLine={false}
                                 tickLine={false}
-                                width={80} 
+                                width={largestLabelWidth * 9} 
                                 minTickGap={0}
                                 />
                                 <Bar dataKey="Vote Counter" minPointSize={2} barSize={30} 
