@@ -55,6 +55,7 @@ const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
             const [{ size }] = logo.files;
             sizeFile = size;
         }
+        
         const rejectEmojiRegexp = /[\ud800-\udbff][\udc00-\udfff]|[^\0-\x7f]/;
 
         if (name === "") {
@@ -91,10 +92,14 @@ const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
             updateErrors("logoError", "The Party Logo is required");
             isValid = false;
         }
+        else if (logo.files[0].type !== "image/png") {
+            updateErrors("logoError", "The only file type allowed is a PNG image");
+            isValid = false;
+        }
         else if (sizeFile > maxSize) {
             updateErrors("logoError", "The max allowed size of a file is 50KB");
             isValid = false;
-            }
+        }
         else {
         updateErrors("logoError", "");
         }
@@ -172,6 +177,7 @@ const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
                             className="sm text-center mt-4"
                             id="logo"
                             name="logo"
+                            accept=".png"
                             />
                         {errors.has("logoError") &&
                         <small id="logoErrors" className="text-danger">
