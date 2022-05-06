@@ -75,13 +75,10 @@ const ElectionChart = ({ election, parties, votes }: ElectionChartProps) => {
             );
 
             let longestWordInPartyName: string = longestWord(name);
-            console.log(longestWordInPartyName);
             largestLabelWidth = largestLabelWidth > longestWordInPartyName.length ? largestLabelWidth : longestWordInPartyName.length;
         }
         
     );
-
-    console.log(largestLabelWidth);
 
     return (
         <>
