@@ -3,10 +3,13 @@ import Image from 'next/image'
 import { logout, isUserAdmin, isUserLoggedIn, getUsername } from '../../services/auth';
 import { NextRouter, useRouter } from 'next/dist/client/router';
 import Router from 'next/router';
-import { Navbar, Container, Nav,  } from 'react-bootstrap';
+import { Navbar, Container, Nav } from 'react-bootstrap';
+import { useSession } from 'next-auth/react';
 
 const NavigationBar = () => {
     const router: NextRouter = useRouter();
+    const { data: session } = useSession();
+    console.log(session);
 
     const logoutHandling = (event: any) => {
         event.preventDefault();
@@ -33,14 +36,14 @@ const NavigationBar = () => {
                         <a className="nav-link">Homepage</a>
                     </Link>
                     </Nav.Item>
-                    {isUserLoggedIn() && !isUserAdmin() &&
+                    {session && isUserLoggedIn(session) && !isUserAdmin(session) &&
                     <Nav.Item>
                         <Link href="/user-dashboard">
                             <a className="nav-link">Elections</a>
                         </Link>
                     </Nav.Item>
                     }
-                    {isUserLoggedIn() && isUserAdmin() &&
+                    {session && isUserLoggedIn(session) && isUserAdmin(session) &&
                     <Nav.Item>
                         <Link href="/admin-dashboard">
                             <a className="nav-link">Admin Dashboard</a>
@@ -48,7 +51,7 @@ const NavigationBar = () => {
                     </Nav.Item>
                     }
                     </Nav>
-                    {!isUserLoggedIn() && !(router.pathname === "/login" || router.pathname === "/sign-up") &&
+                    {!session && !isUserLoggedIn(session) && !(router.pathname === "/login" || router.pathname === "/sign-up") &&
                     <ul className="navbar-nav">
                         <div className="nav-item text-nowrap">
                             <Link href="/login">
@@ -57,10 +60,10 @@ const NavigationBar = () => {
                         </div>
                     </ul>
                     }
-                    {isUserLoggedIn() && !(router.pathname === "/login" || router.pathname === "/sign-up") &&
+                    {session && isUserLoggedIn(session) && !(router.pathname === "/login" || router.pathname === "/sign-up") &&
                     <ul className="navbar-nav">
                         <div className="nav-item text-nowrap mt-3">
-                            <p className="nav-link active">Hello {isUserAdmin() ? "Administrator" : getUsername()!}</p>
+                            <p className="nav-link active">Hello {isUserAdmin(session) ? "Administrator" : getUsername(session)!}</p>
                         </div>
                         <div className="nav-item text-nowrap mt-3">
                             <a className="nav-link" href="" onClick={logoutHandling}>Logout</a>
@@ -74,4 +77,4 @@ const NavigationBar = () => {
     );
 };
 
-export default NavigationBar
+export default NavigationBar;

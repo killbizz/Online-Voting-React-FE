@@ -12,7 +12,8 @@ import {
     Alert
   } from "react-bootstrap";
 import { Party } from "../../classes/Party";
-import { fileToBase64, newParty } from "../../services/party";
+import { fileToBase64 } from "../../lib/base64";
+import { newParty } from "../../services/party";
 
 interface NewPartyProps {
     refreshOnPartiesChange: any

@@ -11,22 +11,26 @@ import NewParty from '../../components/admin/NewParty';
 import { useState } from 'react';
 import { getVotes } from '../../services/vote';
 import { Vote } from '../../classes/Vote';
+import { isUserAdmin, isUserLoggedIn } from '../../services/auth';
+import { getSession } from 'next-auth/react';
+import { Session } from 'next-auth';
 
 interface AdminDashboardProps {
   partiesArray: Party[],
   electionsArray: Election[],
-  votesArray: Vote[]
+  votesArray: Vote[],
+  session: Session | null
 }
 
-const AdminDashboard = ({ partiesArray, electionsArray, votesArray } : AdminDashboardProps) => {
+const AdminDashboard = ({ partiesArray, electionsArray, votesArray, session } : AdminDashboardProps) => {
 
   const refreshOnElectionsChange = async () => {
-    const freshElections = await getElections();
+    const freshElections = await getElections(session?.accessToken);
     setElections(freshElections);
   };
 
   const refreshOnPartiesChange = async () => {
-    const freshParties = await getParties();
+    const freshParties = await getParties(session?.accessToken);
     setParties(freshParties);
   };
 
@@ -53,8 +57,9 @@ const AdminDashboard = ({ partiesArray, electionsArray, votesArray } : AdminDash
 };
 
 export const getServerSideProps: GetServerSideProps<AdminDashboardProps> = async ({ req }): Promise<GetStaticPropsResult<AdminDashboardProps>> => {
-  // session handling using cookies
-  if(!(req.cookies.userId !== undefined && req.cookies.userRole === "admin")) {
+  const session = await getSession({ req });
+
+  if(!(isUserLoggedIn(session) && isUserAdmin(session))) {
     return {
       redirect: {
         destination: "/login",
@@ -62,11 +67,13 @@ export const getServerSideProps: GetServerSideProps<AdminDashboardProps> = async
       },
     };
   }
+  const accessToken = session?.accessToken;
   return {
     props: {
-      partiesArray: await getParties(),
-      electionsArray: await getElections(),
-      votesArray: await getVotes()
+      partiesArray: await getParties(accessToken),
+      electionsArray: await getElections(accessToken),
+      votesArray: await getVotes(accessToken),
+      session: session
     }
   };
 };

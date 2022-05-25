@@ -3,17 +3,22 @@ export default class Fetcher {
 
   constructor(funName: string) {
     this.url = new URL(
-      //`http://localhost:8080/${funName}`
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/${funName}`
+      `http://localhost:8080/${funName}`
+      //`${process.env.NEXT_PUBLIC_BACKEND_URL}/${funName}`
     );
   }
 
-  async getJSONResponse(method: string, params: string | null = null): Promise<any> {
+  async getJSONResponse(method: string, params: string | null = null, token: string | undefined = undefined): Promise<any> {
+
+    let jwtToken: string = "Bearer " + (token !== undefined ? token : "");
 
     let header: HeadersInit = {
       "Content-Type": "application/json"
     };
     let req = null;
+
+    // add JWT if present in a cookie
+    Object.assign(header, token !== undefined ? { "Authorization": jwtToken } : null);
 
     if (method === "GET") {
       req = await fetch(this.url.href, {
