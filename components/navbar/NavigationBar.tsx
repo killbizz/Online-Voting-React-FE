@@ -7,9 +7,9 @@ import { Navbar, Container, Nav } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 
 const NavigationBar = () => {
+    
     const router: NextRouter = useRouter();
     const { data: session } = useSession();
-    console.log(session);
 
     const logoutHandling = (event: any) => {
         event.preventDefault();
@@ -63,7 +63,7 @@ const NavigationBar = () => {
                     {session && isUserLoggedIn(session) && !(router.pathname === "/login" || router.pathname === "/sign-up") &&
                     <ul className="navbar-nav">
                         <div className="nav-item text-nowrap mt-3">
-                            <p className="nav-link active">Hello {isUserAdmin(session) ? "Administrator" : getUsername(session)!}</p>
+                            <p className="nav-link active">Hello {getUsername(session)!}</p>
                         </div>
                         <div className="nav-item text-nowrap mt-3">
                             <a className="nav-link" href="" onClick={logoutHandling}>Logout</a>
