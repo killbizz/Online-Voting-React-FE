@@ -5,6 +5,7 @@ import Head from 'next/head'
 import Footer from './footer/Footer'
 // to avoid warning due to Next.js SSR
 import dynamic from 'next/dynamic'
+import CookieConsent from "react-cookie-consent";
 
 const NavigationBar = dynamic(() => import('./navbar/NavigationBar'), { ssr: false })
 
@@ -28,6 +29,15 @@ const Layout = ({ children, title = 'e-Voting Web Application' }: Props) => {
       <NavigationBar />
     </header>
     {children}
+    <CookieConsent
+      location="bottom"
+      cookieName="CookieConsentBanner"
+      style={{ background: "#2B373B" }}
+      buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
+      expires={30}
+    >
+      This website uses cookies only for purposes strictly necessary for its operation.
+    </CookieConsent>
     <Footer />
   </div>
   );
