@@ -46,7 +46,7 @@ export const logout = (): void => {
   
   startLoadingBar();
   
-  signOut();
+  signOut({redirect: false});
 
   stopLoadingBar();
 }
@@ -72,7 +72,7 @@ export const isUserLoggedIn = (session: Session | null, shouldRedirect: boolean 
   //     }
   // }, [session]);
 
-  if (session?.error === "RefreshAccessTokenError") {
+  if (session?.error !== undefined) {
       signOut({ callbackUrl: '/login', redirect: shouldRedirect });
   }
 
