@@ -8,6 +8,8 @@ import { getParties } from '../../services/party';
 import { Vote } from '../../classes/Vote';
 import { getVotesByUserId } from '../../services/vote';
 import VotingHistory from '../../components/user/VotingHistory';
+import { isUserAdmin, isUserLoggedIn } from '../../services/auth';
+import { getSession } from 'next-auth/react';
 
 interface UserDashboardProps {
     elections: Election[],
@@ -44,28 +46,30 @@ const UserDashboard = ({parties,  elections, votesOfTheUser, userId}: UserDashbo
 }
 
 export const getServerSideProps: GetServerSideProps<UserDashboardProps> = async ({ req }): Promise<GetStaticPropsResult<UserDashboardProps>> => {
-    // session handling using cookies
-    if(!(req.cookies.userId !== undefined && req.cookies.userRole !== "admin")) {
-      return {
-        redirect: {
-          destination: "/login",
-          permanent: false,
-        },
-      };
-    }
+  const session = await getSession({ req });
 
-    const id: string | undefined = req.cookies.userId;
-    const votesOfTheUser = await getVotesByUserId(id!);
-    const elections = await getElections();
-    const parties = await getParties();
+  if(!(isUserLoggedIn(session) && !isUserAdmin(session))) {
     return {
-      props: {
-        elections: elections,
-        parties: parties,
-        votesOfTheUser: votesOfTheUser,
-        userId: id === undefined ? null : id
-      }
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
     };
+  }
+
+  const accessToken = session?.accessToken;
+  const id = session?.user.id;
+  const votesOfTheUser = await getVotesByUserId(id!, accessToken);
+  const elections = await getElections(accessToken);
+  const parties = await getParties(accessToken);
+  return {
+    props: {
+      elections: elections,
+      parties: parties,
+      votesOfTheUser: votesOfTheUser,
+      userId: id === undefined ? null : id
+    }
+  };
 };
 
 export default UserDashboard;

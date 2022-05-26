@@ -5,10 +5,13 @@ import { useState } from 'react';
 import Router from 'next/router'
 import { Alert } from 'react-bootstrap';
 import { User } from '../../classes/User';
+import { useSession } from 'next-auth/react';
 
 const SignUp = () => {
 
-    if(isUserLoggedIn()) {
+    const { data: session } = useSession();
+
+    if(isUserLoggedIn(session)) {
         Router.push("/");
     }
     

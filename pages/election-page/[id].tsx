@@ -4,20 +4,24 @@ import { Election } from '../../classes/Election';
 import { Party } from '../../classes/Party';
 import Layout from '../../components/Layout';
 import { getElection } from '../../services/election';
-import { getPartiesById, getParty } from '../../services/party';
+import { getPartiesById } from '../../services/party';
 import { newVote } from '../../services/vote';
 import Router from 'next/router';
 import { Vote } from '../../classes/Vote';
 import moment from 'moment';
 import { Accordion, Card, Button, Modal } from 'react-bootstrap';
+import { isUserAdmin, isUserLoggedIn } from '../../services/auth';
+import { getSession } from 'next-auth/react';
+import { Session } from 'next-auth';
 
 interface ElectionPageProps {
     parties: Party[],
     election: Election,
-    userId: string | null
+    userId: string | null,
+    session: Session | null
 }
 
-const ElectionPage = ({ parties, election, userId }: ElectionPageProps) => {
+const ElectionPage = ({ parties, election, userId, session }: ElectionPageProps) => {
 
   const selectParty = (id: number, event:any) => {
     event.preventDefault();
@@ -31,7 +35,7 @@ const ElectionPage = ({ parties, election, userId }: ElectionPageProps) => {
 
     const vote: Vote = new Vote(0, userId!, selectedParty!.id, election.id, date);
     
-    await newVote(vote);
+    await newVote(vote, session?.accessToken);
     Router.push('/user-dashboard');
   }
 
@@ -121,8 +125,9 @@ const ElectionPage = ({ parties, election, userId }: ElectionPageProps) => {
 }
 
 export const getServerSideProps: GetServerSideProps<ElectionPageProps> = async ({params, req }): Promise<GetStaticPropsResult<ElectionPageProps>> => {
-    // session handling using cookies
-    if((req.cookies.userId === undefined || req.cookies.userRole === "admin")) {
+    const session = await getSession({ req });
+
+    if(!(isUserLoggedIn(session) && !isUserAdmin(session))) {
       return {
         redirect: {
           destination: "/login",
@@ -130,7 +135,9 @@ export const getServerSideProps: GetServerSideProps<ElectionPageProps> = async (
         },
       };
     }
-    const election: Election | undefined = await getElection(Number(params!.id));
+
+    const accessToken = session?.accessToken;
+    const election: Election | undefined = await getElection(Number(params!.id), accessToken);
     // election doesn't exist
     if(election === undefined){
       return {
@@ -140,13 +147,14 @@ export const getServerSideProps: GetServerSideProps<ElectionPageProps> = async (
         },
       };
     }
-    let parties: Party[] = await getPartiesById(election!.parties);
-    const id: string | undefined = req.cookies.userId;
+    let parties: Party[] = await getPartiesById(election!.parties, accessToken);
+    const id: string | undefined =  session?.user.id;
     return {
       props: {
         parties: parties,
         election: election,
-        userId: id === undefined ? null : id
+        userId: id === undefined ? null : id,
+        session: session
       }
     };
 };
