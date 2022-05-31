@@ -6,6 +6,7 @@ import moment from "moment";
 import { useState } from "react";
 import { deleteElection, updateElection } from "../../services/election";
 import { Party } from "../../classes/Party";
+import { useSession } from "next-auth/react";
 
 interface ElectionDetailProps {
     election: Election,
@@ -14,6 +15,8 @@ interface ElectionDetailProps {
 }
 
 const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: ElectionDetailProps) => {
+
+    const {data : session}  = useSession();
 
     const updateElectionHandler = async (event: any) => {
         event.preventDefault();
@@ -34,7 +37,7 @@ const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: Electio
             const updatedElection: Election = new Election(election.id, name, type, moment(dpStartDate).format('YYYY-MM-DD'), 
               moment(dpEndDate).format('YYYY-MM-DD'), partiesInModifiedElection, election.votes);
     
-            await updateElection(election.id, updatedElection);
+            await updateElection(election.id, updatedElection, session?.accessToken);
             refreshOnElectionsChange();
             handleClose();
         }
@@ -127,7 +130,7 @@ const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: Electio
     }
 
     const deleteElectionHandler = async () => {
-        const result: boolean = await deleteElection(election.id);
+        const result: boolean = await deleteElection(election.id, session?.accessToken);
         if(result){
             refreshOnElectionsChange();
             handleClose();

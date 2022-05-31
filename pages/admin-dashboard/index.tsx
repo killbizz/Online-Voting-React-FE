@@ -12,17 +12,17 @@ import { useState } from 'react';
 import { getVotes } from '../../services/vote';
 import { Vote } from '../../classes/Vote';
 import { isUserAdmin, isUserLoggedIn } from '../../services/auth';
-import { getSession } from 'next-auth/react';
-import { Session } from 'next-auth';
+import { getSession, useSession } from 'next-auth/react';
 
 interface AdminDashboardProps {
   partiesArray: Party[],
   electionsArray: Election[],
-  votesArray: Vote[],
-  session: Session | null
+  votesArray: Vote[]
 }
 
-const AdminDashboard = ({ partiesArray, electionsArray, votesArray, session } : AdminDashboardProps) => {
+const AdminDashboard = ({ partiesArray, electionsArray, votesArray } : AdminDashboardProps) => {
+
+  const {data: session} = useSession();
 
   const refreshOnElectionsChange = async () => {
     const freshElections = await getElections(session?.accessToken);
@@ -44,11 +44,11 @@ const AdminDashboard = ({ partiesArray, electionsArray, votesArray, session } : 
                 <div>
                     <h1 className="text-center mb-4">Admin Dashboard</h1>
                     <h3 className="text-center my-4">Elections</h3>
-                    <NewElection parties={parties} refreshOnElectionsChange={refreshOnElectionsChange} />
+                    <NewElection parties={parties} refreshOnElectionsChange={refreshOnElectionsChange} session={session} />
                     <ElectionList elections={elections} parties={parties} votes={votesArray} refreshOnElectionsChange={refreshOnElectionsChange} />
                     <h3 className="text-center my-4">Political Parties</h3>
-                    <NewParty refreshOnPartiesChange={refreshOnPartiesChange} />
-                    <PartyList parties={parties} elections={elections} refreshOnPartiesChange={refreshOnPartiesChange} />
+                    <NewParty refreshOnPartiesChange={refreshOnPartiesChange} session={session} />
+                    <PartyList parties={parties} elections={elections} refreshOnPartiesChange={refreshOnPartiesChange} session={session} />
                 </div>
             </div>
         </div>
@@ -72,8 +72,7 @@ export const getServerSideProps: GetServerSideProps<AdminDashboardProps> = async
     props: {
       partiesArray: await getParties(accessToken),
       electionsArray: await getElections(accessToken),
-      votesArray: await getVotes(accessToken),
-      session: session
+      votesArray: await getVotes(accessToken)
     }
   };
 };

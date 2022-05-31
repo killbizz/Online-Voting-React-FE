@@ -1,3 +1,5 @@
+import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 import {
     Button,
@@ -16,10 +18,11 @@ import { fileToBase64 } from "../../lib/base64";
 import { newParty } from "../../services/party";
 
 interface NewPartyProps {
-    refreshOnPartiesChange: any
+    refreshOnPartiesChange: any,
+    session: Session | null
 }
 
-const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
+const NewParty = ({ refreshOnPartiesChange, session }: NewPartyProps) => {
 
     const createNewParty = async (event: any) => {
         event.preventDefault();
@@ -34,7 +37,7 @@ const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
             const base64logo = await fileToBase64(logoFile.files[0]);
 
             const party: Party = new Party(0, name, candidate, base64logo);
-            const result: boolean = await newParty(party);
+            const result: boolean = await newParty(party, session?.accessToken);
             refreshOnPartiesChange();
             setPartyCreated(result);
 

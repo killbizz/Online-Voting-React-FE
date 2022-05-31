@@ -64,15 +64,18 @@ const callbacks = {
         // console.log(decoded);
         // If accessTokenExpiry is 24 hours, we have to refresh token before 24 hours pass.
         //const shouldRefreshTime = Math.round((Date(decoded["exp"]) - 60 * 60 * 1000) - Date.now());
+
+        // I have to refresh the token 10 minutes before accessTokenExpireDate
         const shouldRefresh = moment(decoded["exp"] * 1000).subtract(10, "minutes").isBefore(moment());
 
-        console.log("shouldRefreshToken: " + shouldRefresh);
+        //console.log("shouldRefreshToken: " + shouldRefresh);
         // If the token is still valid, just return it.
         if (!shouldRefresh) {
             return Promise.resolve(token);
         }
 
         // If the call arrives after 23 hours have passed, we allow to refresh the token.
+        
         token = refreshAccessToken(token);
         return Promise.resolve(token);
     },

@@ -1,8 +1,7 @@
 import { startLoadingBar, stopLoadingBar } from '../lib/loading';
 import { User } from '../classes/User';
 import getBackendResponse from '../lib/endpoints';
-import { signIn as authSignIn, signOut, getSession } from 'next-auth/react';
-import { useEffect } from "react";
+import { signIn as authSignIn, signOut } from 'next-auth/react';
 import { Session } from 'next-auth';
 
 export const signIn = async (email: string, password: string): Promise<boolean> => {
@@ -54,24 +53,6 @@ export const logout = (): void => {
 export const isUserLoggedIn = (session: Session | null, shouldRedirect: boolean = true) => {
   let isAuthenticated: boolean = false;
 
-  // useEffect(() => {
-  //     if (session?.error === "RefreshAccessTokenError") {
-  //         signOut({ callbackUrl: '/login', redirect: shouldRedirect });
-  //     }
-
-  //     if (session === null) {
-  //         // if (router.route !== '/login') {
-  //         //     router.replace('/login');
-  //         // }
-  //         isAuthenticated = false;
-  //     } else if (session !== undefined) {
-  //         // if (router.route === '/login') {
-  //         //     router.replace('/');
-  //         // }
-  //         isAuthenticated = true
-  //     }
-  // }, [session]);
-
   if (session?.error !== undefined) {
       signOut({ callbackUrl: '/login', redirect: shouldRedirect });
   }
@@ -92,7 +73,7 @@ export const isUserLoggedIn = (session: Session | null, shouldRedirect: boolean 
 }
 
 export const isUserAdmin = (session: Session | null) : boolean | undefined => {
-  return isUserLoggedIn(session) && session?.roles.includes("ROLE_ADMIN");
+  return isUserLoggedIn(session) && session?.roles && session?.roles.includes("ROLE_ADMIN");
 }
 
 export const getUsername = (session: Session | null) : string | null | undefined => {
