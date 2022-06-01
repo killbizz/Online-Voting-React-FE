@@ -47,7 +47,7 @@ const IndexPage = () => {
         </div>
         <div className="row pt-4" id="homeCanvasRow">
             <HomeCanvas />
-          </div>
+        </div>
       </div>
     </Layout>
   );

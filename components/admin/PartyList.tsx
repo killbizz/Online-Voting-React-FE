@@ -10,11 +10,12 @@ import { Session } from "next-auth";
 interface PartyListProps {
     parties: Party[],
     elections: Election[],
-    refreshOnPartiesChange: any,
-    session: Session | null
+    refreshOnPartiesChange: any
 }
 
-const PartyList = ({ parties, elections, refreshOnPartiesChange, session }: PartyListProps) => {
+const PartyList = ({ parties, elections, refreshOnPartiesChange }: PartyListProps) => {
+
+    const {data: session} = useSession();
 
     const deletePossibility = (id: number): boolean => {
         const today = new Date(new Date().toDateString());

@@ -9,7 +9,7 @@ import { Vote } from '../../classes/Vote';
 import { getVotesByUserId } from '../../services/vote';
 import VotingHistory from '../../components/user/VotingHistory';
 import { isUserAdmin, isUserLoggedIn } from '../../services/auth';
-import { getSession } from 'next-auth/react';
+import { getSession, signOut } from 'next-auth/react';
 
 interface UserDashboardProps {
     elections: Election[],
@@ -49,6 +49,7 @@ export const getServerSideProps: GetServerSideProps<UserDashboardProps> = async 
   const session = await getSession({ req });
 
   if(!(isUserLoggedIn(session) && !isUserAdmin(session))) {
+    signOut({ callbackUrl: '/login', redirect: false });
     return {
       redirect: {
         destination: "/login",

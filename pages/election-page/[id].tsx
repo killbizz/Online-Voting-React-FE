@@ -11,7 +11,7 @@ import { Vote } from '../../classes/Vote';
 import moment from 'moment';
 import { Accordion, Card, Button, Modal } from 'react-bootstrap';
 import { isUserAdmin, isUserLoggedIn } from '../../services/auth';
-import { getSession } from 'next-auth/react';
+import { getSession, signOut } from 'next-auth/react';
 import { Session } from 'next-auth';
 
 interface ElectionPageProps {
@@ -128,6 +128,7 @@ export const getServerSideProps: GetServerSideProps<ElectionPageProps> = async (
     const session = await getSession({ req });
 
     if(!(isUserLoggedIn(session) && !isUserAdmin(session))) {
+      signOut({ callbackUrl: '/login', redirect: false });
       return {
         redirect: {
           destination: "/login",

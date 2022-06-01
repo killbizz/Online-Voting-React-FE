@@ -6,20 +6,16 @@ import { Election } from "../../classes/Election";
 import { Party } from "../../classes/Party";
 import { newElection } from "../../services/election";
 import moment from "moment";
-import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 
 interface NewElectionProps {
   parties: Party[],
-  refreshOnElectionsChange: any,
-  session: Session | null
+  refreshOnElectionsChange: any
 }
 
-const NewElection = ({ parties, refreshOnElectionsChange, session }: NewElectionProps) => {
+const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) => {
 
-  parties.map((party: Party) => {
-    console.log(party.name);
-  });
-  console.log(session);
+  const {data: session} = useSession();
 
   const formValidation = (name: string, startDate: Date, endDate: Date): boolean => {
     let isValid: boolean = true;
@@ -209,7 +205,6 @@ const NewElection = ({ parties, refreshOnElectionsChange, session }: NewElection
                   <Col sm="9">
                       {
                         parties.map((party: Party) => {
-                          console.log("DAGHE"+party.name);
                           return (
                             <div key={party.id} className="row align-items-center border border-secondary rounded my-1">
                               <input className="col-auto mx-2 checkbox" type="checkbox" id={party.id.toString()} value={party.id} onClick={() => handlePartyClick(party.id)} />

@@ -13,10 +13,6 @@ declare module "next-auth" {
     accessToken: string,
     /** The user's refresh token. */
     refreshToken: string,
-    /** The user's access token expiration date. */
-    accessTokenExpiry: number,
-    /** The user's refresh token expiration date. */
-    refreshTokenExpiry: number,
     /** The user's roles. */
     roles: string[],
     error?: string

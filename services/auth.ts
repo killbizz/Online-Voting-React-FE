@@ -3,6 +3,7 @@ import { User } from '../classes/User';
 import getBackendResponse from '../lib/endpoints';
 import { signIn as authSignIn, signOut } from 'next-auth/react';
 import { Session } from 'next-auth';
+import router from 'next/router';
 
 export const signIn = async (email: string, password: string): Promise<boolean> => {
 
@@ -53,20 +54,13 @@ export const logout = (): void => {
 export const isUserLoggedIn = (session: Session | null, shouldRedirect: boolean = true) => {
   let isAuthenticated: boolean = false;
 
-  if (session?.error !== undefined) {
-      signOut({ callbackUrl: '/login', redirect: shouldRedirect });
-  }
-
-  if (session === null) {
-      // if (router.route !== '/login') {
-      //     router.replace('/login');
-      // }
-      isAuthenticated = false;
-  } else if (session !== undefined) {
-      // if (router.route === '/login') {
-      //     router.replace('/');
-      // }
-      isAuthenticated = true
+  if (session?.error) {
+    signOut({ callbackUrl: '/login', redirect: shouldRedirect });
+  } 
+  if (session === undefined || session === null) {
+    isAuthenticated = false;
+  } else {
+    isAuthenticated = true
   }
 
   return isAuthenticated;

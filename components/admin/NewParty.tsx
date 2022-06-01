@@ -1,4 +1,3 @@
-import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import {
@@ -18,11 +17,12 @@ import { fileToBase64 } from "../../lib/base64";
 import { newParty } from "../../services/party";
 
 interface NewPartyProps {
-    refreshOnPartiesChange: any,
-    session: Session | null
+    refreshOnPartiesChange: any
 }
 
-const NewParty = ({ refreshOnPartiesChange, session }: NewPartyProps) => {
+const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
+
+    const {data: session} = useSession();
 
     const createNewParty = async (event: any) => {
         event.preventDefault();
