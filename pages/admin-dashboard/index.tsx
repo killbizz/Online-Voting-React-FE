@@ -13,16 +13,17 @@ import { getVotes } from '../../services/vote';
 import { Vote } from '../../classes/Vote';
 import { isUserAdmin, isUserLoggedIn } from '../../services/auth';
 import { getSession, signOut, useSession } from 'next-auth/react';
-import { Session } from 'next-auth';
+import { NextPageWithAuth } from '../../types/auth-types';
 
 interface AdminDashboardProps {
   partiesArray: Party[],
   electionsArray: Election[],
-  votesArray: Vote[],
-  session: Session | null
+  votesArray: Vote[]
 }
 
-const AdminDashboard = ({ partiesArray, electionsArray, votesArray, session } : AdminDashboardProps) => {
+const AdminDashboard: NextPageWithAuth<AdminDashboardProps> = ({ partiesArray, electionsArray, votesArray } : AdminDashboardProps) => {
+
+  const { data: session } = useSession();
 
   const refreshOnElectionsChange = async () => {
     const freshElections = await getElections(session?.accessToken);
@@ -74,10 +75,11 @@ export const getServerSideProps: GetServerSideProps<AdminDashboardProps> = async
     props: {
       partiesArray: await getParties(accessToken),
       electionsArray: await getElections(accessToken),
-      votesArray: await getVotes(accessToken),
-      session: session
+      votesArray: await getVotes(accessToken)
     }
   };
 };
-  
-  export default AdminDashboard;
+
+AdminDashboard.auth = true;
+
+export default AdminDashboard;

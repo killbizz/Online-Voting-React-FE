@@ -11,17 +11,18 @@ import { Vote } from '../../classes/Vote';
 import moment from 'moment';
 import { Accordion, Card, Button, Modal } from 'react-bootstrap';
 import { isUserAdmin, isUserLoggedIn } from '../../services/auth';
-import { getSession, signOut } from 'next-auth/react';
-import { Session } from 'next-auth';
+import { getSession, signOut, useSession } from 'next-auth/react';
+import { NextPageWithAuth } from '../../types/auth-types';
 
 interface ElectionPageProps {
     parties: Party[],
     election: Election,
-    userId: string | null,
-    session: Session | null
+    userId: string | null
 }
 
-const ElectionPage = ({ parties, election, userId, session }: ElectionPageProps) => {
+const ElectionPage: NextPageWithAuth<ElectionPageProps> = ({ parties, election, userId }: ElectionPageProps) => {
+
+  const { data: session } = useSession();
 
   const selectParty = (id: number, event:any) => {
     event.preventDefault();
@@ -154,10 +155,11 @@ export const getServerSideProps: GetServerSideProps<ElectionPageProps> = async (
       props: {
         parties: parties,
         election: election,
-        userId: id === undefined ? null : id,
-        session: session
+        userId: id === undefined ? null : id
       }
     };
 };
+
+ElectionPage.auth = true;
 
 export default ElectionPage;

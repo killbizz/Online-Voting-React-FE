@@ -10,6 +10,7 @@ import { getVotesByUserId } from '../../services/vote';
 import VotingHistory from '../../components/user/VotingHistory';
 import { isUserAdmin, isUserLoggedIn } from '../../services/auth';
 import { getSession, signOut } from 'next-auth/react';
+import { NextPageWithAuth } from '../../types/auth-types';
 
 interface UserDashboardProps {
     elections: Election[],
@@ -18,7 +19,7 @@ interface UserDashboardProps {
     userId: string | null
 }
 
-const UserDashboard = ({parties,  elections, votesOfTheUser, userId}: UserDashboardProps ) => {
+const UserDashboard: NextPageWithAuth<UserDashboardProps> = ({parties,  elections, votesOfTheUser, userId}: UserDashboardProps ) => {
 
     let userRelatedElections: Election[] = [];
     let userRetaledParties: Party[] = [];
@@ -72,5 +73,7 @@ export const getServerSideProps: GetServerSideProps<UserDashboardProps> = async 
     }
   };
 };
+
+UserDashboard.auth = true;
 
 export default UserDashboard;
