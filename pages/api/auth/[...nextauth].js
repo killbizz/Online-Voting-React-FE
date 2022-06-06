@@ -8,7 +8,7 @@ async function refreshAccessToken(tokenObject) {
     console.log("--- REFRESH-TOKEN ---");
     try {
         // Get a new set of tokens with a refreshToken
-        const tokenResponse = await getBackendResponse("token/refresh", "GET", null, tokenObject.refreshToken);
+        const tokenResponse = (await getBackendResponse("token/refresh", "GET", null, tokenObject.refreshToken)).response;
         return {
             ...tokenObject,
             accessToken: tokenResponse.access_token,
@@ -55,17 +55,32 @@ const callbacks = {
             token.userId = user.user_id;
             token.userName = user.user_name;
         }
-        const decoded = jwt.decode(token.accessToken);
+        const decodedAccessToken = jwt.decode(token.accessToken);
+        const decodedRefreshToken = jwt.decode(token.refreshToken);
+
+        // refreshToken is expired => logout
+        if(decodedRefreshToken !== null && moment(decodedRefreshToken["exp"] * 1000).isBefore(moment())) {
+            token.error = "RefreshTokenExpired";
+            return Promise.resolve(token);
+        }
 
         // I have to refresh the token 5 minutes before accessTokenExpireDate
-        const shouldRefresh = moment(decoded["exp"] * 1000).subtract(5, "minutes").isBefore(moment());
+        const shouldRefresh = moment(decodedAccessToken["exp"] * 1000).subtract(2, "minutes").isBefore(moment());
+        console.log(shouldRefresh);
+        console.log(JSON.stringify(decodedAccessToken))
+        console.log(JSON.stringify(decodedRefreshToken))
+        console.log(moment(decodedAccessToken["exp"] * 1000).toString())
+        console.log(moment(decodedRefreshToken["exp"] * 1000).toString())
 
         // If the token is still valid, just return it.
         if (!shouldRefresh) {
             return Promise.resolve(token);
         }
 
-        token = refreshAccessToken(token);
+        token = await refreshAccessToken(token);
+        console.log("Token after Refresh:");
+        console.log(JSON.stringify(token));
+
         return Promise.resolve(token);
     },
     session: async ({ session, token }) => {
@@ -75,17 +90,30 @@ const callbacks = {
             session.accessToken = token.accessToken;
             session.refreshToken = token.refreshToken;
             session.roles = decodedAccessToken["roles"];
-            session.error = token.error ? token.error : undefined;
+            session.error = token.error !== undefined ? token.error : undefined;
             session.user.id = token.userId;
             session.user.name = token.userName;
         }
         return Promise.resolve(session);
     },
+    redirect: async ({ url, baseUrl }) => {
+        // Allows relative callback URLs
+        if (url.startsWith("/")) return `${baseUrl}${url}`
+        // Allows callback URLs on the same origin
+        else if (new URL(url).origin === baseUrl) return url
+        return baseUrl
+      }
+}
+
+const session = {
+    // Seconds - How long until an idle session expires and is no longer valid.
+    maxAge: 30 * 24 * 60 * 60, // 30 days
 }
 
 export const options = {
     providers,
     callbacks,
+    session,
     pages: {},
     secret: `${process.env.JWT_SECRET}`
 }

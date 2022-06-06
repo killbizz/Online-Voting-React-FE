@@ -3,7 +3,6 @@ import { User } from '../classes/User';
 import getBackendResponse from '../lib/endpoints';
 import { signIn as authSignIn, signOut } from 'next-auth/react';
 import { Session } from 'next-auth';
-import router from 'next/router';
 
 export const signIn = async (email: string, password: string): Promise<boolean> => {
 
@@ -51,7 +50,7 @@ export const logout = (): void => {
   stopLoadingBar();
 }
 
-export const isUserLoggedIn = (session: Session | null, shouldRedirect: boolean = true) => {
+export const isUserLoggedIn = (session: Session | null, shouldRedirect: boolean = false) => {
   let isAuthenticated: boolean = false;
 
   if (session?.error) {
