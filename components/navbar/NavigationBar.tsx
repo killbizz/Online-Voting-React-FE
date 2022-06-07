@@ -39,7 +39,7 @@ const NavigationBar = () => {
                     {session && isUserLoggedIn(session) && !isUserAdmin(session) &&
                     <Nav.Item>
                         <Link href="/user-dashboard">
-                            <a className="nav-link">Elections</a>
+                            <a className="nav-link">Personal Dashboard</a>
                         </Link>
                     </Nav.Item>
                     }
