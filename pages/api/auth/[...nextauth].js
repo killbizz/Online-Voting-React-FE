@@ -5,7 +5,6 @@ import getBackendResponse from '../../../lib/endpoints'
 import moment from 'moment';
 
 async function refreshAccessToken(tokenObject) {
-    console.log("--- REFRESH-TOKEN ---");
     try {
         // Get a new set of tokens with a refreshToken
         const tokenResponse = (await getBackendResponse("token/refresh", "GET", null, tokenObject.refreshToken)).response;
@@ -65,12 +64,7 @@ const callbacks = {
         }
 
         // I have to refresh the token 5 minutes before accessTokenExpireDate
-        const shouldRefresh = moment(decodedAccessToken["exp"] * 1000).subtract(2, "minutes").isBefore(moment());
-        console.log(shouldRefresh);
-        console.log(JSON.stringify(decodedAccessToken))
-        console.log(JSON.stringify(decodedRefreshToken))
-        console.log(moment(decodedAccessToken["exp"] * 1000).toString())
-        console.log(moment(decodedRefreshToken["exp"] * 1000).toString())
+        const shouldRefresh = moment(decodedAccessToken["exp"] * 1000).subtract(5, "minutes").isBefore(moment());
 
         // If the token is still valid, just return it.
         if (!shouldRefresh) {
@@ -78,8 +72,6 @@ const callbacks = {
         }
 
         token = await refreshAccessToken(token);
-        console.log("Token after Refresh:");
-        console.log(JSON.stringify(token));
 
         return Promise.resolve(token);
     },
