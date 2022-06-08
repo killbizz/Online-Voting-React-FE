@@ -63,7 +63,7 @@ const callbacks = {
             return Promise.resolve(token);
         }
 
-        // I have to refresh the token 5 minutes before accessTokenExpireDate
+        // I should refresh the token 5 minutes before accessTokenExpireDate
         const shouldRefresh = moment(decodedAccessToken["exp"] * 1000).subtract(5, "minutes").isBefore(moment());
 
         // If the token is still valid, just return it.
