@@ -31,7 +31,7 @@ export const signUp = async (user: User) : Promise<boolean> => {
 
   const { response } = await getBackendResponse("user", "POST", JSON.stringify(user), undefined);
 
-  if (response.statusCode !== 201) {
+  if (response.error !== undefined) {
     stopLoadingBar();
     return false;
   }
