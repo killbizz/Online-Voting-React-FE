@@ -122,6 +122,7 @@ const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: Electio
     
     const disableUpdateElection = () => {
         setUserWantsToUpdate(false);
+        setShow(false);
     }
 
     const updateOrDeletePossibility = () => {
