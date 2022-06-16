@@ -5,7 +5,7 @@ import { deleteParty } from "../../services/party";
 import React, { useEffect, useState } from 'react';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import { useSession } from "next-auth/react";
-import { Session } from "next-auth";
+import { startLoadingBar, stopLoadingBar } from "../../lib/loading";
 
 interface PartyListProps {
     parties: Party[],
@@ -34,13 +34,16 @@ const PartyList = ({ parties, elections, refreshOnPartiesChange }: PartyListProp
     }
 
     const deleteSelectedParty = async (id: number) => {
+        startLoadingBar();
+        
         await deleteParty(id, session?.accessToken);
         refreshOnPartiesChange();
+
+        stopLoadingBar();
     }
 
     // Need this for the react-tooltip
     const [isMounted,setIsMounted] = useState(false);
-
     useEffect(() => {
         setIsMounted(true);
     },[]);

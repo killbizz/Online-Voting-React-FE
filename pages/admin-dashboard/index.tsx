@@ -11,7 +11,7 @@ import NewParty from '../../components/admin/NewParty';
 import { useState } from 'react';
 import { getVotes } from '../../services/vote';
 import { Vote } from '../../classes/Vote';
-import { isUserAdmin, isUserLoggedIn } from '../../services/auth';
+import { isAdmin, isUserLoggedIn } from '../../services/auth';
 import { getSession, signOut, useSession } from 'next-auth/react';
 import { NextPageWithAuth } from '../../types/auth-types';
 
@@ -61,7 +61,7 @@ const AdminDashboard: NextPageWithAuth<AdminDashboardProps> = ({ partiesArray, e
 export const getServerSideProps: GetServerSideProps<AdminDashboardProps> = async ({ req }): Promise<GetStaticPropsResult<AdminDashboardProps>> => {
   const session = await getSession({ req });
 
-  if(!(isUserLoggedIn(session) && isUserAdmin(session))) {
+  if(!(isUserLoggedIn(session) && isAdmin(session))) {
     signOut({ callbackUrl: '/login', redirect: false });
     return {
       redirect: {

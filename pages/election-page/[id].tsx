@@ -10,9 +10,10 @@ import Router from 'next/router';
 import { Vote } from '../../classes/Vote';
 import moment from 'moment';
 import { Accordion, Card, Button, Modal } from 'react-bootstrap';
-import { isUserAdmin, isUserLoggedIn } from '../../services/auth';
+import { isUser, isUserLoggedIn } from '../../services/auth';
 import { getSession, signOut, useSession } from 'next-auth/react';
 import { NextPageWithAuth } from '../../types/auth-types';
+import { startLoadingBar, stopLoadingBar } from '../../lib/loading';
 
 interface ElectionPageProps {
     parties: Party[],
@@ -35,8 +36,13 @@ const ElectionPage: NextPageWithAuth<ElectionPageProps> = ({ parties, election, 
     let date: string = moment(today).format('YYYY-MM-DD');
 
     const vote: Vote = new Vote(0, userId!, selectedParty!.id, election.id, date);
+
+    startLoadingBar();
     
     await newVote(vote, session?.accessToken);
+
+    stopLoadingBar();
+    
     Router.push('/user-dashboard');
   }
 
@@ -128,7 +134,7 @@ const ElectionPage: NextPageWithAuth<ElectionPageProps> = ({ parties, election, 
 export const getServerSideProps: GetServerSideProps<ElectionPageProps> = async ({params, req }): Promise<GetStaticPropsResult<ElectionPageProps>> => {
     const session = await getSession({ req });
 
-    if(!(isUserLoggedIn(session) && !isUserAdmin(session))) {
+    if(!(isUserLoggedIn(session) && isUser(session))) {
       signOut({ callbackUrl: '/login', redirect: false });
       return {
         redirect: {

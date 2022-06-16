@@ -8,7 +8,7 @@ import { getParties } from '../../services/party';
 import { Vote } from '../../classes/Vote';
 import { getVotesByUserId } from '../../services/vote';
 import VotingHistory from '../../components/user/VotingHistory';
-import { isUserAdmin, isUserLoggedIn } from '../../services/auth';
+import { isUser, isUserLoggedIn } from '../../services/auth';
 import { getSession, signOut } from 'next-auth/react';
 import { NextPageWithAuth } from '../../types/auth-types';
 
@@ -49,7 +49,7 @@ const UserDashboard: NextPageWithAuth<UserDashboardProps> = ({parties,  election
 export const getServerSideProps: GetServerSideProps<UserDashboardProps> = async ({ req }): Promise<GetStaticPropsResult<UserDashboardProps>> => {
   const session = await getSession({ req });
 
-  if(!(isUserLoggedIn(session) && !isUserAdmin(session))) {
+  if(!(isUserLoggedIn(session) && isUser(session))) {
     signOut({ callbackUrl: '/login', redirect: false });
     return {
       redirect: {

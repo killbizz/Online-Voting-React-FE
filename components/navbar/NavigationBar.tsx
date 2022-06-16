@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { logout, isUserAdmin, isUserLoggedIn, getUsername } from '../../services/auth';
+import { logout, isAdmin, isUser, isUserLoggedIn, getUsername } from '../../services/auth';
 import { NextRouter, useRouter } from 'next/dist/client/router';
 import Router from 'next/router';
 import { Navbar, Container, Nav } from 'react-bootstrap';
@@ -36,14 +36,14 @@ const NavigationBar = () => {
                         <a className="nav-link">Homepage</a>
                     </Link>
                     </Nav.Item>
-                    {session && isUserLoggedIn(session) && !isUserAdmin(session) &&
+                    {session && isUserLoggedIn(session) && isUser(session) &&
                     <Nav.Item>
                         <Link href="/user-dashboard">
                             <a className="nav-link">Personal Dashboard</a>
                         </Link>
                     </Nav.Item>
                     }
-                    {session && isUserLoggedIn(session) && isUserAdmin(session) &&
+                    {session && isUserLoggedIn(session) && isAdmin(session) &&
                     <Nav.Item>
                         <Link href="/admin-dashboard">
                             <a className="nav-link">Admin Dashboard</a>

@@ -65,8 +65,12 @@ export const isUserLoggedIn = (session: Session | null, shouldRedirect: boolean 
   return isAuthenticated;
 }
 
-export const isUserAdmin = (session: Session | null) : boolean | undefined => {
+export const isAdmin = (session: Session | null) : boolean | undefined => {
   return isUserLoggedIn(session) && session?.roles && session?.roles.includes("ROLE_ADMIN");
+}
+
+export const isUser = (session: Session | null) : boolean | undefined => {
+  return isUserLoggedIn(session) && session?.roles && session?.roles.includes("ROLE_USER");
 }
 
 export const getUsername = (session: Session | null) : string | null | undefined => {

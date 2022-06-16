@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import Layout from '../components/Layout'
-import { isUserAdmin, isUserLoggedIn } from '../services/auth';
+import { isUser, isAdmin, isUserLoggedIn } from '../services/auth';
 const HomeCanvas = dynamic(() => import('../paper-js/HomeCanvas'), { ssr: false });
 const Link = dynamic(() => import('next/link'), { ssr: false });
 
@@ -31,12 +31,12 @@ const IndexPage = () => {
                   <a type="button" className="btn btn-outline-secondary btn-lg px-4">Login with your credentials</a>
                 </Link>
                 }
-                {isUserLoggedIn(session) && isUserAdmin(session) &&
+                {isUserLoggedIn(session) && isAdmin(session) &&
                 <Link href="/admin-dashboard">
                   <a type="button" className="btn btn-outline-secondary btn-lg px-4">Manage the elections</a>
                 </Link>
                 }
-                {isUserLoggedIn(session) && !isUserAdmin(session) &&
+                {isUserLoggedIn(session) && isUser(session) &&
                 <Link href="/user-dashboard">
                   <a type="button" className="btn btn-outline-secondary btn-lg px-4">Go and vote!</a>
                 </Link>
