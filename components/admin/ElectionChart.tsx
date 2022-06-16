@@ -1,9 +1,10 @@
 import { Election } from "../../classes/Election";
 import { Modal } from 'react-bootstrap';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Party } from "../../classes/Party";
 import { Vote } from "../../classes/Vote";
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import ReactTooltip from "react-tooltip";
 
 interface ElectionChartProps {
     election: Election,
@@ -45,6 +46,19 @@ const ElectionChart = ({ election, parties, votes }: ElectionChartProps) => {
         return word;
     }
 
+    const showChartPossibility = (): boolean => {
+        const today = new Date(new Date().toDateString());
+        today.setHours(23,59,59,999);
+
+        return new Date(election.startDate) < today;
+    }
+
+    // Need this for the react-tooltip
+    const [isMounted,setIsMounted] = useState(false);
+    useEffect(() => {
+        setIsMounted(true);
+    },[]);
+
     interface DataType {
         partyName: string,
         "Vote Counter": string
@@ -82,7 +96,19 @@ const ElectionChart = ({ election, parties, votes }: ElectionChartProps) => {
 
     return (
         <>
-            <button className="btn btn-sm btn-secondary my-1 mr-2" onClick={handleShow}>Details</button>
+            { !showChartPossibility() &&
+                <>
+                    {isMounted &&
+                        <ReactTooltip place="bottom" type="dark" effect="solid"/>
+                    }
+                    <span className="d-inline-block" tabIndex={0} data-tip="This election has not yet begun">
+                        <button className="btn btn-sm my-1 mr-2" disabled={false}>Chart</button>
+                    </span>
+                </>
+            }
+            { showChartPossibility() &&
+                <button className="btn btn-sm btn-secondary my-1 mr-2" onClick={handleShow}>Chart</button>
+            }
             <Modal show={show} onHide={handleClose} onEnter={handleLoad}>
                 <Modal.Header closeButton>
                     <Modal.Title>
