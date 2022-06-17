@@ -3,7 +3,7 @@ export default class Fetcher {
 
   constructor(funName: string) {
     this.url = new URL(
-      //`http://localhost:8080/${funName}`
+      // `http://localhost:8080/${funName}`
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/${funName}`
     );
   }
