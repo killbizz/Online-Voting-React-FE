@@ -1,8 +1,8 @@
 import { Party } from '../classes/Party';
 import getBackendResponse from '../lib/endpoints';
 
-export const getParties = async (): Promise<Party[]> => {
-  const { response } = await getBackendResponse("party", "GET", null);
+export const getParties = async (jwt: string | undefined): Promise<Party[]> => {
+  const { response } = await getBackendResponse("party", "GET", null, jwt);
   if (response._embedded === undefined) {
     return [];
   }
@@ -17,9 +17,9 @@ export const getParties = async (): Promise<Party[]> => {
   })
 }
 
-export const getPartiesById = async (partiesId: number[]): Promise<Party[]> => {
+export const getPartiesById = async (partiesId: number[], jwt: string | undefined): Promise<Party[]> => {
 
-  const { response } = await getBackendResponse("party", "GET", null);
+  const { response } = await getBackendResponse("party", "GET", null, jwt);
   if (partiesId.length === 0 || response._embedded === undefined) {
     return [];
   }
@@ -35,35 +35,26 @@ export const getPartiesById = async (partiesId: number[]): Promise<Party[]> => {
     });
 }
 
-export const getParty = async (id: number): Promise<Party> => {
-  const { response } = await getBackendResponse(`party/${id}`, "GET", null);
+export const getParty = async (id: number, jwt: string | undefined): Promise<Party> => {
+  const { response } = await getBackendResponse(`party/${id}`, "GET", null, jwt);
   if (response === undefined) {
     console.log(response);
   }
   return response;
 }
 
-export const newParty = async (party: Party): Promise<boolean> => {
-  const { response } = await getBackendResponse("party", "POST", JSON.stringify(party));
+export const newParty = async (party: Party, jwt: string | undefined): Promise<boolean> => {
+  const { response } = await getBackendResponse("party", "POST", JSON.stringify(party), jwt);
   if(response.error !== undefined){
     return false;
   }
   return true;
 }
 
-export const deleteParty = async (id: number): Promise<boolean> => {
-  const { response } = await getBackendResponse(`party/${id}`, "DELETE", null);
+export const deleteParty = async (id: number, jwt: string | undefined): Promise<boolean> => {
+  const { response } = await getBackendResponse(`party/${id}`, "DELETE", null, jwt);
   if(response.error !== undefined){
     return false;
   }
   return true;
-}
-
-export const fileToBase64 = async (file: any): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsBinaryString(file);
-    reader.onload = () => resolve('data:image/png;base64,'+btoa(reader.result!.toString()));
-    reader.onerror = (e) => reject(e);
-  });
 }

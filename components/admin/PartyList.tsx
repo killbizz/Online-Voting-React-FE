@@ -4,6 +4,8 @@ import { Election } from "../../classes/Election";
 import { deleteParty } from "../../services/party";
 import React, { useEffect, useState } from 'react';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
+import { useSession } from "next-auth/react";
+import { startLoadingBar, stopLoadingBar } from "../../lib/loading";
 
 interface PartyListProps {
     parties: Party[],
@@ -12,6 +14,8 @@ interface PartyListProps {
 }
 
 const PartyList = ({ parties, elections, refreshOnPartiesChange }: PartyListProps) => {
+
+    const {data: session} = useSession();
 
     const deletePossibility = (id: number): boolean => {
         const today = new Date(new Date().toDateString());
@@ -30,13 +34,16 @@ const PartyList = ({ parties, elections, refreshOnPartiesChange }: PartyListProp
     }
 
     const deleteSelectedParty = async (id: number) => {
-        await deleteParty(id);
+        startLoadingBar();
+        
+        await deleteParty(id, session?.accessToken);
         refreshOnPartiesChange();
+
+        stopLoadingBar();
     }
 
     // Need this for the react-tooltip
     const [isMounted,setIsMounted] = useState(false);
-
     useEffect(() => {
         setIsMounted(true);
     },[]);
@@ -53,31 +60,32 @@ const PartyList = ({ parties, elections, refreshOnPartiesChange }: PartyListProp
             </Tr>
             </Thead>
             <Tbody>
-                { parties.map((party) => 
-                    <Tr key={party.id}>
-                        <Th scope="row">{party.id}</Th>
-                        <Td>{party.name.charAt(0).toUpperCase() + party.name.slice(1)}</Td>
-                        <Td>{party.candidate.charAt(0).toUpperCase() + party.candidate.slice(1)}</Td>
-                        <Td><img className="rounded partyLogo" src={party.base64logo} alt={party.name} height="100" width="60" /></Td>
-                        <Td>
-                            { !deletePossibility(party.id) &&
-                            <>
-                                {isMounted &&
-                                    <ReactTooltip place="bottom" type="dark" effect="solid"/>
+                { parties.map((party) => {
+                    return (
+                        <Tr key={party.id}>
+                            <Th scope="row">{party.id}</Th>
+                            <Td>{party.name.charAt(0).toUpperCase() + party.name.slice(1)}</Td>
+                            <Td>{party.candidate.charAt(0).toUpperCase() + party.candidate.slice(1)}</Td>
+                            <Td><img className="rounded partyLogo" src={party.base64logo} alt={party.name} height="100" width="60" /></Td>
+                            <Td>
+                                { !deletePossibility(party.id) &&
+                                <>
+                                    {isMounted &&
+                                        <ReactTooltip place="bottom" type="dark" effect="solid"/>
+                                    }
+                                    <span className="d-inline-block" tabIndex={0} data-tip="This party is present in al least one votation">
+                                        <button type="button" disabled={!deletePossibility(party.id)} className="btn btn-danger btn-sm px-4 me-md-2">Delete</button>
+                                    </span>
+                                </>
                                 }
-                                <span className="d-inline-block" tabIndex={0} data-tip="This party is present in al least one votation">
-                                    <button type="button" disabled={!deletePossibility(party.id)} className="btn btn-danger btn-sm px-4 me-md-2">Delete</button>
-                                </span>
-                            </>
-                            }
-                            { deletePossibility(party.id) &&
-                            <button type="button" className="btn btn-danger btn-sm px-4 me-md-2" onClick={() => deleteSelectedParty(party.id)}>Delete</button>
-                            }
-                        </Td>
-                    </Tr>
-                )
+                                { deletePossibility(party.id) &&
+                                <button type="button" className="btn btn-danger btn-sm px-4 me-md-2" onClick={() => deleteSelectedParty(party.id)}>Delete</button>
+                                }
+                            </Td>
+                        </Tr>
+                    )
                 }
-                
+                )} 
             </Tbody>
         </Table>
     );

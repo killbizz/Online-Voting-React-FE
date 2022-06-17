@@ -58,7 +58,9 @@ img{
 }
 
 .footer {
-  background-color: #d8d8d8;
+  background: #ADA996;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to left, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to left, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   height: 62px;
 }
 
@@ -138,7 +140,9 @@ img{
 }
 
 .color-nav {
-  background-color: #c2c2c2;
+    background: #ADA996;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 /* ELECTION PAGE */
@@ -248,7 +252,7 @@ div.active {
 }
 
 .fa-github {
-  background: #d8d8d8;
+  background: transparent;
   color: rgb(0, 0, 0);
 }
 
@@ -284,4 +288,20 @@ canvas[resize] {
 #nprogress .spinner-icon {
   width: 36px !important;
   height: 36px !important;
+}
+
+.image-cropper {
+  width: 65%;
+  height: 50%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12%;
+}
+
+.image-cropper > img {
+  display: inline;
+  margin: 0 auto;
+  height: 100%;
+  width: 100%;
+  max-width:500px;
 }

@@ -1,13 +1,17 @@
 import Link from 'next/link'
 import Layout from '../../components/Layout'
-import { isUserLoggedIn, signIn } from '../../services/auth';
+import { signIn } from '../../services/auth';
 import { useState } from 'react';
 import Router from 'next/router'
 import { Alert } from 'react-bootstrap';
+import { isUserLoggedIn } from '../../services/auth';
+import { useSession } from 'next-auth/react';
 
 const Login = () => {
 
-    if(isUserLoggedIn()) {
+    const { data: session } = useSession();
+
+    if(isUserLoggedIn(session)) {
         Router.push("/");
     }
 

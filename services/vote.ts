@@ -1,8 +1,8 @@
 import { Vote } from '../classes/Vote';
 import getBackendResponse from '../lib/endpoints';
 
-export const getVotes = async (): Promise<Vote[]> => {
-  const { response } = await getBackendResponse("vote", "GET", null);
+export const getVotes = async (jwt: string | undefined): Promise<Vote[]> => {
+  const { response } = await getBackendResponse("vote", "GET", null, jwt);
   if (response._embedded === undefined) {
     return [];
   }
@@ -17,8 +17,8 @@ export const getVotes = async (): Promise<Vote[]> => {
   })
 }
 
-export const getVotesByUserId = async (id: string): Promise<Vote[]> => {
-  const { response } = await getBackendResponse("vote", "GET", null);
+export const getVotesByUserId = async (id: string, jwt: string | undefined): Promise<Vote[]> => {
+  const { response } = await getBackendResponse("vote", "GET", null, jwt);
   if (response._embedded === undefined) {
     return [];
   }
@@ -33,8 +33,8 @@ export const getVotesByUserId = async (id: string): Promise<Vote[]> => {
   })
 }
 
-export const newVote = async (vote: Vote): Promise<boolean> => {
-  const { response } = await getBackendResponse("vote", "POST", JSON.stringify(vote));
+export const newVote = async (vote: Vote, jwt: string | undefined): Promise<boolean> => {
+  const { response } = await getBackendResponse("vote", "POST", JSON.stringify(vote), jwt);
   if(response.error !== undefined){
     return false;
   }

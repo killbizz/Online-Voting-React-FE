@@ -6,6 +6,8 @@ import moment from "moment";
 import { useState } from "react";
 import { deleteElection, updateElection } from "../../services/election";
 import { Party } from "../../classes/Party";
+import { useSession } from "next-auth/react";
+import { startLoadingBar, stopLoadingBar } from "../../lib/loading";
 
 interface ElectionDetailProps {
     election: Election,
@@ -14,6 +16,8 @@ interface ElectionDetailProps {
 }
 
 const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: ElectionDetailProps) => {
+
+    const {data : session}  = useSession();
 
     const updateElectionHandler = async (event: any) => {
         event.preventDefault();
@@ -24,6 +28,8 @@ const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: Electio
         let endDate: string = event.target.dpEndDate.value;
     
         const valid: boolean = formValidation(name, type, dpStartDate, dpEndDate, partiesInModifiedElection);
+
+        startLoadingBar();
     
         if(valid){
             name = name === "" ? election.name : name;
@@ -34,10 +40,12 @@ const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: Electio
             const updatedElection: Election = new Election(election.id, name, type, moment(dpStartDate).format('YYYY-MM-DD'), 
               moment(dpEndDate).format('YYYY-MM-DD'), partiesInModifiedElection, election.votes);
     
-            await updateElection(election.id, updatedElection);
+            await updateElection(election.id, updatedElection, session?.accessToken);
             refreshOnElectionsChange();
             handleClose();
         }
+
+        stopLoadingBar();
     }
 
     const formValidation = (name: string, type: string, startDate: Date, endDate: Date, parties: number[]): boolean => {
@@ -119,6 +127,7 @@ const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: Electio
     
     const disableUpdateElection = () => {
         setUserWantsToUpdate(false);
+        setShow(false);
     }
 
     const updateOrDeletePossibility = () => {
@@ -127,11 +136,15 @@ const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: Electio
     }
 
     const deleteElectionHandler = async () => {
-        const result: boolean = await deleteElection(election.id);
-        if(result){
-            refreshOnElectionsChange();
-            handleClose();
-        }
+      startLoadingBar();
+
+      const result: boolean = await deleteElection(election.id, session?.accessToken);
+      if(result){
+          refreshOnElectionsChange();
+          handleClose();
+      }
+
+      stopLoadingBar();
     }
 
     let partiesInModifiedElection: number[] = Array.from(election.parties);
@@ -149,7 +162,7 @@ const ElectionDetail = ({ election, parties, refreshOnElectionsChange }: Electio
 
     return (
         <>
-            <button className="btn btn-sm btn-warning my-1 mr-2" onClick={handleShow}>Edit</button>
+            <button className="btn btn-sm btn-warning my-1 mr-2" onClick={handleShow}>Details</button>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                 <Modal.Title>Election Details</Modal.Title>

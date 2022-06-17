@@ -5,10 +5,13 @@ import { useState } from 'react';
 import Router from 'next/router'
 import { Alert } from 'react-bootstrap';
 import { User } from '../../classes/User';
+import { useSession } from 'next-auth/react';
 
 const SignUp = () => {
 
-    if(isUserLoggedIn()) {
+    const { data: session } = useSession();
+
+    if(isUserLoggedIn(session)) {
         Router.push("/");
     }
     
@@ -19,7 +22,7 @@ const SignUp = () => {
         setErrors(new Map<string,string>(errors.set(key,value)));
     }
 
-    const signInHandling = async (event: any) => {
+    const signUpHandling = async (event: any) => {
         event.preventDefault();
 
         const email: string = event.target.email.value;
@@ -99,7 +102,7 @@ const SignUp = () => {
                 <div className="sign-up">
                         <h1 className="my-3">Sign Up</h1>
                         <img className="loginSignUpImages" src="/images/sign_up2.png" alt="Login Image" width="180" height="180" />  
-                        <form method="POST" name="loginForm" className="my-3" onSubmit={signInHandling}>
+                        <form method="POST" name="loginForm" className="my-3" onSubmit={signUpHandling}>
                         <div className="form-floating">
                             <input type="text" className="form-control" id="email" name="email" placeholder="name@example.com" />
                             <label htmlFor="email">Email address</label>

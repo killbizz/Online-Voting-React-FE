@@ -6,13 +6,17 @@ import { Election } from "../../classes/Election";
 import { Party } from "../../classes/Party";
 import { newElection } from "../../services/election";
 import moment from "moment";
+import { useSession } from "next-auth/react";
+import { startLoadingBar, stopLoadingBar } from "../../lib/loading";
 
 interface NewElectionProps {
   parties: Party[],
-  refreshOnElectionsChange: any,
+  refreshOnElectionsChange: any
 }
 
 const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) => {
+
+  const {data: session} = useSession();
 
   const formValidation = (name: string, startDate: Date, endDate: Date): boolean => {
     let isValid: boolean = true;
@@ -70,11 +74,13 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
 
   const handlePartyClick = (id: number) => {
     const idx: number = partiesInNewElection.indexOf(id);
+    let newArray = [...partiesInNewElection];
     if(idx > -1){
-      partiesInNewElection.splice(idx, 1);
+      newArray.splice(idx, 1);
     } else {
-      partiesInNewElection.push(id);
+      newArray.push(id);
     }
+    setPartiesInNewElection(newArray);
   }
 
   const createNewElection = async (event: any) => {
@@ -85,9 +91,11 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
 
     const valid: boolean = formValidation(name, dpStartDate, dpEndDate);
 
+    startLoadingBar();
+
     if(valid){
-      const election: Election = new Election(0, name, type, moment(dpStartDate).format('YYYY-MM-DD'), moment(dpEndDate).format('YYYY-MM-DD'), Object.assign([], partiesInNewElection) , undefined);
-      const result: boolean = await newElection(election);
+      const election: Election = new Election(0, name, type, moment(dpStartDate).format('YYYY-MM-DD'), moment(dpEndDate).format('YYYY-MM-DD'), [...partiesInNewElection] , undefined);
+      const result: boolean = await newElection(election, session?.accessToken);
       refreshOnElectionsChange();
       setElectionCreated(result);
 
@@ -97,13 +105,15 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
       setDpStartDate(new Date());
       setDpEndDate(new Date());
       unCheck();
-      partiesInNewElection = [];
+      setPartiesInNewElection([]);
     } else {
       setElectionCreated(false);
     }
+    
+    stopLoadingBar();
   }
   
-  let partiesInNewElection: number[] = [];
+  const [partiesInNewElection, setPartiesInNewElection] = useState<number[]>([]);
   const [dpStartDate, setDpStartDate] = useState(new Date());
   const [dpEndDate, setDpEndDate] = useState(new Date());
   const [errors, setErrors] = useState(new Map<string,string>());
@@ -201,11 +211,14 @@ const NewElection = ({ parties, refreshOnElectionsChange }: NewElectionProps) =>
                   </FormLabel>
                   <Col sm="9">
                       {
-                        parties.map((party: Party) => 
-                          <div key={party.id} className="row align-items-center border border-secondary rounded my-1">
-                            <input className="col-auto mx-2 checkbox" type="checkbox" id={party.id.toString()} value={party.id} onClick={() => handlePartyClick(party.id)} />
-                            <label className="col mx-1" htmlFor={party.name.toString()}>{party.name} - {party.candidate}</label>
-                          </div>)
+                        parties.map((party: Party) => {
+                          return (
+                            <div key={party.id} className="row align-items-center border border-secondary rounded my-1">
+                              <input className="col-auto mx-2 checkbox" type="checkbox" id={party.id.toString()} value={party.id} onClick={() => handlePartyClick(party.id)} />
+                              <label className="col mx-1" htmlFor={party.name.toString()}>{party.name} - {party.candidate}</label>
+                            </div>
+                          );
+                        })
                       }
                   </Col>
                 </FormGroup>

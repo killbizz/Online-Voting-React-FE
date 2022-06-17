@@ -8,6 +8,9 @@ import { getParties } from '../../services/party';
 import { Vote } from '../../classes/Vote';
 import { getVotesByUserId } from '../../services/vote';
 import VotingHistory from '../../components/user/VotingHistory';
+import { isUser, isUserLoggedIn } from '../../services/auth';
+import { getSession, signOut } from 'next-auth/react';
+import { NextPageWithAuth } from '../../types/auth-types';
 
 interface UserDashboardProps {
     elections: Election[],
@@ -16,7 +19,7 @@ interface UserDashboardProps {
     userId: string | null
 }
 
-const UserDashboard = ({parties,  elections, votesOfTheUser, userId}: UserDashboardProps ) => {
+const UserDashboard: NextPageWithAuth<UserDashboardProps> = ({parties,  elections, votesOfTheUser, userId}: UserDashboardProps ) => {
 
     let userRelatedElections: Election[] = [];
     let userRetaledParties: Party[] = [];
@@ -44,28 +47,33 @@ const UserDashboard = ({parties,  elections, votesOfTheUser, userId}: UserDashbo
 }
 
 export const getServerSideProps: GetServerSideProps<UserDashboardProps> = async ({ req }): Promise<GetStaticPropsResult<UserDashboardProps>> => {
-    // session handling using cookies
-    if(!(req.cookies.userId !== undefined && req.cookies.userRole !== "admin")) {
-      return {
-        redirect: {
-          destination: "/login",
-          permanent: false,
-        },
-      };
-    }
+  const session = await getSession({ req });
 
-    const id: string | undefined = req.cookies.userId;
-    const votesOfTheUser = await getVotesByUserId(id!);
-    const elections = await getElections();
-    const parties = await getParties();
+  if(!(isUserLoggedIn(session) && isUser(session))) {
+    signOut({ callbackUrl: '/login', redirect: false });
     return {
-      props: {
-        elections: elections,
-        parties: parties,
-        votesOfTheUser: votesOfTheUser,
-        userId: id === undefined ? null : id
-      }
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
     };
+  }
+
+  const accessToken = session?.accessToken;
+  const id = session?.user.id;
+  const votesOfTheUser = await getVotesByUserId(id!, accessToken);
+  const elections = await getElections(accessToken);
+  const parties = await getParties(accessToken);
+  return {
+    props: {
+      elections: elections,
+      parties: parties,
+      votesOfTheUser: votesOfTheUser,
+      userId: id === undefined ? null : id
+    }
+  };
 };
+
+UserDashboard.auth = true;
 
 export default UserDashboard;

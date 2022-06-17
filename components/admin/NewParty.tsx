@@ -1,3 +1,4 @@
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 import {
     Button,
@@ -12,13 +13,17 @@ import {
     Alert
   } from "react-bootstrap";
 import { Party } from "../../classes/Party";
-import { fileToBase64, newParty } from "../../services/party";
+import { fileToBase64 } from "../../lib/base64";
+import { startLoadingBar, stopLoadingBar } from "../../lib/loading";
+import { newParty } from "../../services/party";
 
 interface NewPartyProps {
     refreshOnPartiesChange: any
 }
 
 const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
+
+    const {data: session} = useSession();
 
     const createNewParty = async (event: any) => {
         event.preventDefault();
@@ -29,11 +34,13 @@ const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
 
         const valid: boolean = formValidation(name, candidate, logoFile);
 
+        startLoadingBar();
+
         if(valid){
             const base64logo = await fileToBase64(logoFile.files[0]);
 
             const party: Party = new Party(0, name, candidate, base64logo);
-            const result: boolean = await newParty(party);
+            const result: boolean = await newParty(party, session?.accessToken);
             refreshOnPartiesChange();
             setPartyCreated(result);
 
@@ -44,13 +51,15 @@ const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
         } else {
             setPartyCreated(false);
         }
+        
+        stopLoadingBar();
     }
 
     const formValidation = (name: string, candidate: string, logo: any): boolean => {
         let isValid: boolean = true;
         let sizeFile: any;
-        // max 50Kb files
-        const maxSize: number = 50000;
+        // max 1MB files
+        const maxSize: number = 1000000;
         if(logo.files.length > 0){
             const [{ size }] = logo.files;
             sizeFile = size;
@@ -97,7 +106,7 @@ const NewParty = ({ refreshOnPartiesChange }: NewPartyProps) => {
             isValid = false;
         }
         else if (sizeFile > maxSize) {
-            updateErrors("logoError", "The max allowed size of a file is 50KB");
+            updateErrors("logoError", "The max allowed size of a file is 1MB");
             isValid = false;
         }
         else {

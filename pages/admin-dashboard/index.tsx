@@ -11,6 +11,9 @@ import NewParty from '../../components/admin/NewParty';
 import { useState } from 'react';
 import { getVotes } from '../../services/vote';
 import { Vote } from '../../classes/Vote';
+import { isAdmin, isUserLoggedIn } from '../../services/auth';
+import { getSession, signOut, useSession } from 'next-auth/react';
+import { NextPageWithAuth } from '../../types/auth-types';
 
 interface AdminDashboardProps {
   partiesArray: Party[],
@@ -18,15 +21,17 @@ interface AdminDashboardProps {
   votesArray: Vote[]
 }
 
-const AdminDashboard = ({ partiesArray, electionsArray, votesArray } : AdminDashboardProps) => {
+const AdminDashboard: NextPageWithAuth<AdminDashboardProps> = ({ partiesArray, electionsArray, votesArray } : AdminDashboardProps) => {
+
+  const { data: session } = useSession();
 
   const refreshOnElectionsChange = async () => {
-    const freshElections = await getElections();
+    const freshElections = await getElections(session?.accessToken);
     setElections(freshElections);
   };
 
   const refreshOnPartiesChange = async () => {
-    const freshParties = await getParties();
+    const freshParties = await getParties(session?.accessToken);
     setParties(freshParties);
   };
 
@@ -41,7 +46,8 @@ const AdminDashboard = ({ partiesArray, electionsArray, votesArray } : AdminDash
                     <h1 className="text-center mb-4">Admin Dashboard</h1>
                     <h3 className="text-center my-4">Elections</h3>
                     <NewElection parties={parties} refreshOnElectionsChange={refreshOnElectionsChange} />
-                    <ElectionList elections={elections} parties={parties} votes={votesArray} refreshOnElectionsChange={refreshOnElectionsChange} />
+                    <ElectionList elections={elections} parties={parties} votes={votesArray} 
+                      refreshOnElectionsChange={refreshOnElectionsChange} />
                     <h3 className="text-center my-4">Political Parties</h3>
                     <NewParty refreshOnPartiesChange={refreshOnPartiesChange} />
                     <PartyList parties={parties} elections={elections} refreshOnPartiesChange={refreshOnPartiesChange} />
@@ -53,8 +59,10 @@ const AdminDashboard = ({ partiesArray, electionsArray, votesArray } : AdminDash
 };
 
 export const getServerSideProps: GetServerSideProps<AdminDashboardProps> = async ({ req }): Promise<GetStaticPropsResult<AdminDashboardProps>> => {
-  // session handling using cookies
-  if(!(req.cookies.userId !== undefined && req.cookies.userRole === "admin")) {
+  const session = await getSession({ req });
+
+  if(!(isUserLoggedIn(session) && isAdmin(session))) {
+    signOut({ callbackUrl: '/login', redirect: false });
     return {
       redirect: {
         destination: "/login",
@@ -62,13 +70,16 @@ export const getServerSideProps: GetServerSideProps<AdminDashboardProps> = async
       },
     };
   }
+  const accessToken = session?.accessToken;
   return {
     props: {
-      partiesArray: await getParties(),
-      electionsArray: await getElections(),
-      votesArray: await getVotes()
+      partiesArray: await getParties(accessToken),
+      electionsArray: await getElections(accessToken),
+      votesArray: await getVotes(accessToken)
     }
   };
 };
-  
-  export default AdminDashboard;
+
+AdminDashboard.auth = true;
+
+export default AdminDashboard;
