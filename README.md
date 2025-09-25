@@ -1,6 +1,4 @@
 # Online Voting React FE
-[![HitCount](https://hits.dwyl.com/killbizz/Online-Voting-React-FE.svg?style=flat-square)](http://hits.dwyl.com/killbizz/Online-Voting-React-FE)
-[![Website](https://img.shields.io/website?down_color=red&down_message=down&up_color=green&up_message=up&url=https%3A%2F%2Fonline-voting.vercel.app%2F)](https://shields.io/)
 
 Frontend module repository of the student internship project made up for Sync Lab company using Nextjs framework.
 
